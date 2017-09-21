@@ -1,0 +1,3 @@
+include ':app', ':CommonLib'
+project(':CommonLib').projectDir = new File('../CommonLib')
+include ':CommonLib:common'
