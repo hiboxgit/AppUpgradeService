@@ -14,15 +14,15 @@ public class CommonLib {
     private static CommonLib instance = new CommonLib();
     private Application context;
 
-    public static CommonLib getInstance(){
+    public static CommonLib getInstance() {
         return instance;
     }
 
-    private CommonLib(){
+    private CommonLib() {
 
     }
 
-    public void init(Application application){
+    public void init(Application application) {
         this.context = application;
 
         //初始化工具类
@@ -32,7 +32,7 @@ public class CommonLib {
         FileDownloader.setupOnApplicationOnCreate(application);
     }
 
-    public Application getContext(){
+    public Application getContext() {
         return context;
     }
 }

@@ -1,9 +1,15 @@
 package com.lachesis.appupgradeservice.modules.upgrade.handler;
 
 import com.google.gson.Gson;
+import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeRequestBean;
 import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeResponseBean;
 import com.lachesis.appupgradeservice.share.NetApiConfig;
+import com.lachesis.common.CommonLib;
 import com.lachesis.common.network.RetrofitManager;
+import com.liulishuo.filedownloader.BaseDownloadTask;
+import com.liulishuo.filedownloader.FileDownloadListener;
+import com.liulishuo.filedownloader.FileDownloadQueueSet;
+import com.liulishuo.filedownloader.FileDownloader;
 
 import org.json.JSONObject;
 
@@ -17,14 +23,18 @@ import rx.Observable;
  * Created by boxue.hao on 2017/9/22.
  */
 
-public class UpgradeHttpHandler {
+public class HttpUpgradeHandler {
 
-    public static Observable<List<UpgradeResponseBean>> checkApkUpdate(List<UpgradeResponseBean> updateList) {
+    public static Observable<List<UpgradeResponseBean>> checkApkUpdate(List<UpgradeRequestBean> updateList) {
         Gson gson = new Gson();
         String jsonStr = gson.toJson(updateList);
-
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonStr);
-        return RetrofitManager.getInstance().getRetrofit(NetApiConfig.SERVER_HOST).create(IUpgradeApi.class)
+        return getUpgradeService()
                 .checkUpdate(body);
+    }
+
+
+    public static IUpgradeApi getUpgradeService(){
+        return RetrofitManager.getInstance().getRetrofit(NetApiConfig.SERVER_HOST).create(IUpgradeApi.class);
     }
 }

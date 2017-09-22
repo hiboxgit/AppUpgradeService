@@ -669,6 +669,23 @@ public class AppUtils {
         return list;
     }
 
+    //获取所有已安装的制定前缀的包名列表
+    public static List<AppInfo> getAppsInfo(String packagePrefix) {
+        List<AppInfo> list = new ArrayList<>();
+        PackageManager pm = Utils.getContext().getPackageManager();
+        // 获取系统中安装的所有软件信息
+        List<PackageInfo> installedPackages = pm.getInstalledPackages(0);
+        for (PackageInfo pi : installedPackages) {
+            AppInfo ai = getBean(pm, pi);
+            if (ai == null) continue;
+
+            if(ai.getPackageName().startsWith(packagePrefix)){
+                list.add(ai);
+            }
+        }
+        return list;
+    }
+
     /**
      * 清除App所有数据
      *
