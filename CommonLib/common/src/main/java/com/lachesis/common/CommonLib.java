@@ -1,10 +1,9 @@
 package com.lachesis.common;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.lachesis.common.utils.Utils;
-import com.lzy.okgo.OkGo;
+import com.liulishuo.filedownloader.FileDownloader;
 
 /**
  * Created by Robert on 2017/9/21.
@@ -29,8 +28,8 @@ public class CommonLib {
         //初始化工具类
         Utils.init(context);
 
-        //初始化okgo网络框架
-        OkGo.getInstance().init(application);
+        //初始化FileDownloader 文件下载框架
+        FileDownloader.setupOnApplicationOnCreate(application);
     }
 
     public Application getContext(){
