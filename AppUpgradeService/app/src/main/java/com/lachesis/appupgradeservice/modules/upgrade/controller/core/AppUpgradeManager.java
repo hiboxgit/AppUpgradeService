@@ -149,7 +149,7 @@ public class AppUpgradeManager {
     }
 
     private void doOnCompleteDownload(){
-        EventBus.getDefault().post(new );
+//        EventBus.getDefault().post(new );
     }
     public void install(){
         registerApkInstallReceiver(CommonLib.getInstance().getContext());

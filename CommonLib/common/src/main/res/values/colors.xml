@@ -1,0 +1,12 @@
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#FFFFF0</color>
+    <color name="colorTransparent">#00000000</color>
+    <color name="simpleDialogBtnTextPressed">#C9CACA</color>
+    <color name="simpleDialogInputTextHint">#949494</color>
+    <color name="gradient_start">#00DDE9</color>    <!--渐变起始色-->
+    <color name="gradient_end">#1763DA</color>      <!--渐变结束色-->
+</resources>

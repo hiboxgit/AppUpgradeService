@@ -2,8 +2,12 @@ package com.lachesis.common;
 
 import android.app.Application;
 
+import com.lachesis.common.utils.AppUtils;
 import com.lachesis.common.utils.Utils;
 import com.liulishuo.filedownloader.FileDownloader;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by Robert on 2017/9/21.
@@ -30,6 +34,16 @@ public class CommonLib {
 
         //初始化FileDownloader 文件下载框架
         FileDownloader.setupOnApplicationOnCreate(application);
+
+        //初始化数据库框架
+        Realm.init(context);
+        RealmConfiguration config = new  RealmConfiguration.Builder()
+                .name(AppUtils.getAppName(context)+".realm")
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        Realm.setDefaultConfiguration(config);
+
+
     }
 
     public Application getContext() {
