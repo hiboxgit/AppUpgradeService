@@ -7,7 +7,7 @@ package com.lachesis.appupgradeservice.share;
 
 public class NetApiConfig {
 
-    public static String SERVER_HOST = "http://10.2.3.55:8927/";
+    public static String SERVER_HOST = "http://10.2.1.87:9099/";
 
-    public static final String UPDATE_CHECK = "/ldm/SoftUpgradeManages/getUpgradeSoft";
+    public static final String UPDATE_CHECK = "/windranger/ldm/SoftUpgradeManages/getUpgradeSoft";
 }

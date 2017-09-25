@@ -1,11 +1,21 @@
 package com.lachesis.appupgradeservice.modules.upgrade.controller.service;
 
+import android.app.Dialog;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.WindowManager;
 
+import com.lachesis.appupgradeservice.modules.upgrade.controller.core.AppUpgradeManager;
+import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeTipEvent;
+import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeCompleteEvent;
 import com.lachesis.appupgradeservice.share.BroadCastConstants;
+import com.lachesis.common.ui.dialog.LoadingDialog;
+import com.lachesis.common.ui.dialog.SimpleDialog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * app升级管理类
@@ -16,7 +26,27 @@ public class UpgradeService extends Service {
 
     private static String TAG = "UpgradeService";
 
+    private SimpleDialog upgradeTipDialog;
+    private LoadingDialog loadingDialog;
+    private SimpleDialog completeTipDialog;
+
     public UpgradeService() {
+
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -54,5 +84,57 @@ public class UpgradeService extends Service {
         }
 
         return START_NOT_STICKY;
+    }
+
+    @Subscribe
+    public void onEventMainThread(UpgradeTipEvent event) {
+        Log.i(TAG,"弹框提示有更新...");
+        upgradeTipDialog = new SimpleDialog(this)
+                .setTitle("发现新版本")
+                .setText(event.getNote())
+                .setLeftButton("稍后更新", new SimpleDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog) {
+                        upgradeTipDialog.dismiss();
+
+                        AppUpgradeManager.getInstance().delay2ShowUpradeDialog();
+                    }
+                })
+                .setRightButton("立即更新", new SimpleDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog) {
+                        upgradeTipDialog.dismiss();
+
+                        loadingDialog = new LoadingDialog(UpgradeService.this)
+                        .setText("正在更新...");
+                        loadingDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                        loadingDialog.show();
+                        AppUpgradeManager.getInstance().install();
+                    }
+                });
+
+        upgradeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        upgradeTipDialog.show();
+
+    }
+
+    @Subscribe
+    public void onEventMainThread(UpgradeCompleteEvent event) {
+        Log.i(TAG,"弹框提示升级成功...");
+        if(loadingDialog!=null && loadingDialog.isShowing()){
+            loadingDialog.dismiss();
+        }
+
+        completeTipDialog = new SimpleDialog(this)
+                .setTitle("升级成功！");
+        completeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        completeTipDialog.show();
+
+        AppUpgradeManager.getInstance().delay2Do(3,new Runnable(){
+            @Override
+            public void run() {
+                completeTipDialog.dismiss();
+            }
+        });
     }
 }

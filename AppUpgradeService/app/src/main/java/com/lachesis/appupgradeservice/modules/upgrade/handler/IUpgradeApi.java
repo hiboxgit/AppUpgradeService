@@ -25,7 +25,7 @@ public interface IUpgradeApi {
     @Headers({"Content-Type: application/json","Accept: application/json"})
     public Observable<UpgradeRequestBean> test(@Path("businessId") String businessId, @Body RequestBody requestBody);
 
-    @POST(NetApiConfig.UPDATE_CHECK)
+    @POST("/windranger/ldm/SoftUpgradeManages/getUpgradeSoft")
     public Observable<List<UpgradeResponseBean>> checkUpdate(@Body RequestBody requestBody);
 
     @GET

@@ -4,14 +4,7 @@ import com.google.gson.Gson;
 import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeRequestBean;
 import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeResponseBean;
 import com.lachesis.appupgradeservice.share.NetApiConfig;
-import com.lachesis.common.CommonLib;
 import com.lachesis.common.network.RetrofitManager;
-import com.liulishuo.filedownloader.BaseDownloadTask;
-import com.liulishuo.filedownloader.FileDownloadListener;
-import com.liulishuo.filedownloader.FileDownloadQueueSet;
-import com.liulishuo.filedownloader.FileDownloader;
-
-import org.json.JSONObject;
 
 import java.util.List;
 

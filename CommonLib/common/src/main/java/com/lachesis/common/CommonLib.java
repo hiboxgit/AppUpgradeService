@@ -2,6 +2,7 @@ package com.lachesis.common;
 
 import android.app.Application;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.lachesis.common.utils.AppUtils;
 import com.lachesis.common.utils.Utils;
 import com.liulishuo.filedownloader.FileDownloader;
@@ -33,7 +34,7 @@ public class CommonLib {
         Utils.init(context);
 
         //初始化FileDownloader 文件下载框架
-        FileDownloader.setupOnApplicationOnCreate(application);
+        FileDownloader.init(context);
 
         //初始化数据库框架
         Realm.init(context);
@@ -43,7 +44,8 @@ public class CommonLib {
                 .build();
         Realm.setDefaultConfiguration(config);
 
-
+        //fresco图片框架初始化
+        Fresco.initialize(context);
     }
 
     public Application getContext() {

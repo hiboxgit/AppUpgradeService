@@ -7,15 +7,18 @@ import android.util.Log;
 
 import com.lachesis.appupgradeservice.modules.upgrade.controller.broadcast.InstallEventReceiver;
 import com.lachesis.appupgradeservice.modules.upgrade.handler.HttpUpgradeHandler;
+import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeCompleteEvent;
+import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeConfigInfo;
 import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeRequestBean;
 import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeResponseBean;
-import com.lachesis.appupgradeservice.share.RunDataHelper;
+import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeTipEvent;
+import com.lachesis.appupgradeservice.share.NetApiConfig;
 import com.lachesis.common.CommonLib;
-import com.lachesis.common.network.HttpTool;
 import com.lachesis.common.utils.AppUtils;
 import com.lachesis.common.utils.SDCardUtils;
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadListener;
+import com.liulishuo.filedownloader.FileDownloader;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -26,16 +29,17 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.internal.util.ActionSubscriber;
 import rx.schedulers.Schedulers;
 
 /**
  * app升级管理类
- *
+ * <p>
  * Created by Robert on 2017/9/19.
  */
 
@@ -46,16 +50,22 @@ public class AppUpgradeManager {
     private static AppUpgradeManager instance = new AppUpgradeManager();
 
     private static final String APK_PREFIX = "com.lachesis";
-    private String apkPath = "";
+    //    private String apkPath = "";
+    private String updateNote = "升级内容";
     private boolean installResult;
     private UpgradeCallBack callBack;
     private InstallEventReceiver installEventReceiver;
 
-    private Subscription  startTaskSubscription;
-    private Subscription  checkUpdateSubscription;
+    private Subscription startTaskSubscription;
+    private Subscription checkUpdateSubscription;
+    private Subscription installTaskSubscription;
+    private Subscription delayShowTipSubscription;
+    private Subscription delay2DoSubscription;
 
     private List<UpgradeResponseBean> upgradeResponseList;
+    private List<UpgradeConfigInfo> wait2InstallList;
     private int downloadApkCount;
+    private int installedApkCount;
 
     public AppUpgradeManager() {
 
@@ -67,12 +77,12 @@ public class AppUpgradeManager {
     }
 
     public void upgrade(UpgradeCallBack callBack) {
-
         this.callBack = callBack;
         upgrade();
     }
 
     public void upgrade() {
+        Log.i(TAG, "开始升级...");
 //        Observable.timer(0, TimeUnit.SECONDS)
         startTaskSubscription = Observable.just(1)
                 .subscribeOn(Schedulers.newThread())
@@ -81,33 +91,69 @@ public class AppUpgradeManager {
                 });
     }
 
-    public void checkUpdate(){
+    public void checkUpdate() {
 
+        Log.i(TAG, "开始检查更新...");
         upgradeResponseList = null;
         List<UpgradeRequestBean> requestData = getApkVersionInfo();
         checkUpdateSubscription = HttpUpgradeHandler.checkApkUpdate(requestData)
                 .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                    upgradeResponseList = result;
-                    download(result);
+                    Log.i(TAG, "接收到升级响应");
+
+                    if (result == null || result.size() == 0) {
+
+
+                    } else {
+                        upgradeResponseList = new ArrayList<UpgradeResponseBean>();
+                        upgradeResponseList.clear();
+                        for (int i = 0; i < result.size(); i++) {
+                            if (result.get(i).getSoftPath() != null && !result.get(i).getSoftPath().equals("")) {
+                                upgradeResponseList.add(result.get(i));
+                            }
+                        }
+                        Log.i(TAG, "接收到的有效升级地址列表个数为：" + upgradeResponseList.size());
+                        if (upgradeResponseList.size() > 0) {
+                            download(upgradeResponseList);
+                        } else {
+                            Log.i(TAG, "无可用升级包！");
+                        }
+
+                    }
+
                 }, throwable -> {
 
                 });
     }
 
-    public void download(List<UpgradeResponseBean> upgradeInfoList){
-
+    public void download(List<UpgradeResponseBean> upgradeInfoList) {
+        Log.i(TAG, "开始下载...:" + upgradeInfoList.size());
         HashMap<String, String> downloadInfoList = new HashMap<String, String>();
+        wait2InstallList = new ArrayList<UpgradeConfigInfo>();
+        wait2InstallList.clear();
 
-        for(int i=0; i<upgradeInfoList.size(); i++){
-            String apkPath = SDCardUtils.getSDCardPath()+upgradeInfoList.get(i).getSoftName()+".apk";
-            downloadInfoList.put(upgradeInfoList.get(i).getSoftPath(),apkPath);
+        for (int i = 0; i < upgradeInfoList.size(); i++) {
+//            String name = upgradeInfoList.get(i).getSoftMark();
+//            String[] nameList = name.split(".");
+//            name = nameList[nameList.length-1];
+            String name = upgradeInfoList.get(i).getSoftName();
+            String apkPath = SDCardUtils.getSDCardPath() + name + ".apk";
+            String remoteFileUrl = NetApiConfig.SERVER_HOST.substring(0, NetApiConfig.SERVER_HOST.length() - 1) + upgradeInfoList.get(i).getSoftPath();
+            downloadInfoList.put(remoteFileUrl, apkPath);
+
+            Log.i(TAG, "添加到待升级列表->apkPath:" + apkPath + ",remoteFileUrl:" + remoteFileUrl);
+            wait2InstallList.add(new UpgradeConfigInfo(apkPath));
         }
 
+        if (wait2InstallList.size() <= 0) {
+            Log.i(TAG, "没有下载任务可用...");
+            return;
+        }
+        Log.i(TAG, "开始多任务下载...");
         //下载队列任务开始
         downloadApkCount = 0;
-        HttpTool.downloadFiles(downloadInfoList, new FileDownloadListener() {
+        downloadFiles(downloadInfoList, new FileDownloadListener() {
             @Override
             protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
 
@@ -119,8 +165,13 @@ public class AppUpgradeManager {
             }
 
             @Override
+            protected void blockComplete(BaseDownloadTask task) {
+                Log.i(TAG, "blockComplete ");
+            }
+
+            @Override
             protected void completed(BaseDownloadTask task) {
-                Log.i(TAG,"task complete :"+task.getTag());
+                Log.i(TAG, "升级包" + task.getTag() + "下载完成 ");
                 doOnEachDownloadTaskComplete();
             }
 
@@ -131,6 +182,7 @@ public class AppUpgradeManager {
 
             @Override
             protected void error(BaseDownloadTask task, Throwable e) {
+                Log.i(TAG, "升级包" + task.getTag() + "下载失败");
                 doOnEachDownloadTaskComplete();
             }
 
@@ -140,23 +192,37 @@ public class AppUpgradeManager {
             }
         });
     }
-    private void doOnEachDownloadTaskComplete(){
+
+    private void doOnEachDownloadTaskComplete() {
         downloadApkCount++;
-        if(upgradeResponseList.size() == downloadApkCount){
+        if (upgradeResponseList.size() == downloadApkCount) {
             //全部下载完毕
             doOnCompleteDownload();
         }
     }
 
-    private void doOnCompleteDownload(){
-//        EventBus.getDefault().post(new );
-    }
-    public void install(){
+    private void doOnCompleteDownload() {
+        Log.i(TAG, "全部下载完成！");
+//        EventBus.getDefault().post(new UpgradeTipEvent(updateNote));
         registerApkInstallReceiver(CommonLib.getInstance().getContext());
-        doIntallApk();
+        installedApkCount = 0;
+        doIntallApk("/mnt/internal_sd/test.apk");
     }
 
-    private List<UpgradeRequestBean> getApkVersionInfo(){
+    public void install() {
+        Log.i(TAG, "开始安装...");
+        installTaskSubscription = Observable.just(1)
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(result -> {
+                    registerApkInstallReceiver(CommonLib.getInstance().getContext());
+                    installedApkCount = 0;
+                    for (int i = 0; i < wait2InstallList.size(); i++) {
+                        doIntallApk(wait2InstallList.get(i).getLocalPath());
+                    }
+                });
+    }
+
+    private List<UpgradeRequestBean> getApkVersionInfo() {
         UpgradeRequestBean item;
         List<UpgradeRequestBean> softwareVersionInfoList = new ArrayList<>();
         softwareVersionInfoList.clear();
@@ -164,7 +230,7 @@ public class AppUpgradeManager {
         //获取联新已经安装的APK列表
         List<AppUtils.AppInfo> installedApkList = AppUtils.getAppsInfo(APK_PREFIX);
 
-        for(int i=0;i<installedApkList.size();i++){ //获取apk版本信息
+        for (int i = 0; i < installedApkList.size(); i++) { //获取apk版本信息
             item = new UpgradeRequestBean();
             item.setSoftMark(installedApkList.get(i).getPackageName());
             item.setSoftVersion(installedApkList.get(i).getVersionCode());
@@ -173,8 +239,8 @@ public class AppUpgradeManager {
         return softwareVersionInfoList;
     }
 
-    private void doIntallApk() {
-        Log.i(TAG, "开始进行apk安装...");
+    private void doIntallApk(String apkPath) {
+        Log.i(TAG, "开始进行apk安装:" + apkPath);
         try {
             // 申请su权限
             Process process = Runtime.getRuntime().exec("su");
@@ -214,15 +280,22 @@ public class AppUpgradeManager {
 
         Log.i(TAG, packageName + "has been installed!");
 
-        if (callBack != null) {
-            callBack.onComplete();
-        } else {
+        installedApkCount++;
 
+        if (installedApkCount == downloadApkCount) {
+            Log.i(TAG, "全部安装完毕！");
+            if (callBack != null) {
+                callBack.onComplete();
+            } else {
+
+            }
+
+            //通知安装完毕
+            EventBus.getDefault().post(new UpgradeCompleteEvent());
+
+            //取消安装监听器
+            unRegisterApkInstallReceiver(CommonLib.getInstance().getContext());
         }
-
-        //取消安装监听器
-        unRegisterApkInstallReceiver(CommonLib.getInstance().getContext());
-
     }
 
     private void registerApkInstallReceiver(Context context) {
@@ -248,6 +321,31 @@ public class AppUpgradeManager {
         }
     }
 
+    public void delay2ShowUpradeDialog() {
+        delayShowTipSubscription = Observable.timer(10, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(result -> {
+                    if (delayShowTipSubscription != null && delayShowTipSubscription.isUnsubscribed()) {
+                        delayShowTipSubscription.unsubscribe();
+                        delayShowTipSubscription = null;
+                    }
+                    EventBus.getDefault().post(new UpgradeTipEvent(updateNote));
+                });
+    }
+
+    public void delay2Do(int seconds, Runnable runnable) {
+        delay2DoSubscription = Observable.timer(seconds, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    if (delay2DoSubscription != null && delay2DoSubscription.isUnsubscribed()) {
+                        delay2DoSubscription.unsubscribe();
+                        delay2DoSubscription = null;
+                    }
+
+                    runnable.run();
+                });
+    }
 
     public static interface UpgradeCallBack {
 
@@ -255,4 +353,33 @@ public class AppUpgradeManager {
 
         public void onError();
     }
+
+    public void downloadFiles(HashMap<String, String> downloadInfoList, final FileDownloadListener queueTarget) {
+
+        boolean isParallel = false; //是否并行下载
+
+//        downloadInfoList.forEach(new BiConsumer<String, String>() {
+//            @Override
+//            public void accept(String url, String localPath) {
+
+        String url = "http://wap.apk.anzhi.com/data3/apk/201708/02/d28bf178baeb73048226a95be421f65b_35829700.apk";
+        String localPath = "/mnt/internal_sd/test.apk";
+
+                FileDownloader.getImpl()
+                        .create(url)
+                        .setPath(localPath)
+                        .setListener(queueTarget)
+                        .ready();
+//            }
+//        });
+
+
+        if (isParallel) {
+            // To form a queue with the same queueTarget and execute them in parallel
+            FileDownloader.getImpl().start(queueTarget, false);
+        } else {
+            FileDownloader.getImpl().start(queueTarget, true);
+        }
+    }
+
 }
