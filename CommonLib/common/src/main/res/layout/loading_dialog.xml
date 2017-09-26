@@ -1,27 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tool="http://schemas.android.com/tools">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/simple_dialog_bg"
+    android:orientation="vertical"
+    android:paddingBottom="6dp"
+    android:paddingTop="20dp">
 
-    <LinearLayout
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/simpleDraweeView"
+        android:layout_width="72px"
+        android:layout_height="72px"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="14dp" />
+
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerHorizontal="true"
-        android:layout_centerInParent="true">
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/simpleDraweeView"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            fresco:placeholderImage="@drawable/loading_state2"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            tool:text="正在更新..."/>
-    </LinearLayout>
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:textColor="@android:color/black"
+        android:textSize="22dp"
+        android:visibility="gone"
+        tools:text="正在为您格式化内存卡..."
+        tools:visibility="visible" />
 
-</RelativeLayout>
+</LinearLayout>

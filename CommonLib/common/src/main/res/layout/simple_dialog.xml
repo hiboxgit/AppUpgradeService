@@ -14,7 +14,7 @@
         android:gravity="center_horizontal"
         android:lineSpacingMultiplier="1.2"
         android:maxEms="8"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         android:textSize="@dimen/dialog_title_textSize"
         android:visibility="gone"
         tools:text="内存卡提示"
@@ -49,7 +49,7 @@
         android:scrollbars="vertical"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbarFadeDuration="1000"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         android:textSize="@dimen/dialog_msg_textSize"
         android:visibility="gone"
         tools:text="内存卡空间不足，无法录像，是否需要格式内存卡？"
@@ -74,8 +74,8 @@
     <ImageView
         android:id="@+id/dividerHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/simple_dialog_divider_horizontal"
+        android:layout_height="1dp"
+        android:background="@color/driver_side"
         android:visibility="gone"
         tools:visibility="visible" />
 
@@ -91,16 +91,15 @@
             android:layout_weight="1"
             android:background="@null"
             android:text="@string/cancel"
-            android:textColor="@color/dialog_simple_btn_text_selector"
             android:textSize="@dimen/dialog_button_textSize"
             android:visibility="gone"
             tools:visibility="visible" />
 
         <ImageView
             android:id="@+id/dividerVertical"
-            android:layout_width="wrap_content"
+            android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@drawable/simple_dialog_divider_vertical"
+            android:background="@color/driver_side"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -111,7 +110,6 @@
             android:layout_weight="1"
             android:background="@null"
             android:text="@string/confirm"
-            android:textColor="@color/dialog_simple_btn_text_selector"
             android:textSize="@dimen/dialog_button_textSize"
             android:visibility="gone"
             tools:visibility="visible" />

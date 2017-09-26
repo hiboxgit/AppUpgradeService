@@ -23,7 +23,29 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/start_upgrade"
+        android:text="http://10.2.13.61:9099/"
         android:hint="请输入URL地址..."
         tools:text="url地址"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/url_edit"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="升级选择"
+            android:onClick="onShowUpgradeTip"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="更新中"
+            android:onClick="onShowLoading"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="升级完毕"
+            android:onClick="onShowComplete"/>
+    </LinearLayout>
 </RelativeLayout>

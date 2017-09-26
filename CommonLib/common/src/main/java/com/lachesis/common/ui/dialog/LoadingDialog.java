@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,17 +20,23 @@ import com.lachesis.common.R;
 
 /**
  * 加载对话框
- *
+ * <p>
  * Created by zhongweiguang on 2016/12/8.
  */
 
-public class LoadingDialog  extends Dialog {
+public class LoadingDialog extends Dialog {
 
     private TextView textTv;
+    private SimpleDraweeView simpleDraweeView;
 
     public LoadingDialog(Context context) {
         super(context, R.style.SimpleDialog);
         initView(context);
+    }
+
+    public LoadingDialog(Context context, int resId) {
+        super(context, R.style.SimpleDialog);
+        initView(context,resId);
     }
 
     @Override
@@ -43,6 +50,8 @@ public class LoadingDialog  extends Dialog {
         layoutParams.y = -getContext().getResources().getDimensionPixelOffset(R.dimen.status_bar_height) / 2;
         getWindow().setGravity(Gravity.CENTER);
         getWindow().setAttributes(layoutParams);
+
+        Log.i("LoadingDialog对话框尺寸","layoutParams.width:"+layoutParams.width+",layoutParams.height:"+layoutParams.height);
     }
 
     private void initView(Context context) {
@@ -54,7 +63,7 @@ public class LoadingDialog  extends Dialog {
         setCancelable(false);
 
         textTv = (TextView) findViewById(R.id.textView);
-        SimpleDraweeView simpleDraweeView = (SimpleDraweeView) findViewById(R.id.simpleDraweeView);
+        simpleDraweeView = (SimpleDraweeView) findViewById(R.id.simpleDraweeView);
 
         DraweeController draweeController =
                 Fresco.newDraweeControllerBuilder()
@@ -63,6 +72,25 @@ public class LoadingDialog  extends Dialog {
                         .setAutoPlayAnimations(true)
                         .build();
         simpleDraweeView.setController(draweeController);
+
+    }
+
+    private void initView(Context context, int resId) {
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        View view = layoutInflater.inflate(R.layout.loading_dialog, null);
+
+        setContentView(view);
+        setCanceledOnTouchOutside(false);
+        setCancelable(false);
+
+        textTv = (TextView) findViewById(R.id.textView);
+        simpleDraweeView = (SimpleDraweeView) findViewById(R.id.simpleDraweeView);
+        simpleDraweeView.setImageResource(resId);
+    }
+
+    public LoadingDialog setImage(int resId) {
+        simpleDraweeView.setImageResource(resId);
+        return this;
     }
 
     public LoadingDialog setText(String text) {
@@ -74,6 +102,11 @@ public class LoadingDialog  extends Dialog {
     public LoadingDialog setTextRes(@StringRes int resId) {
         textTv.setText(resId);
         textTv.setVisibility(View.VISIBLE);
+        return this;
+    }
+
+    public LoadingDialog setTextColor(int color) {
+        textTv.setTextColor(color);
         return this;
     }
 }

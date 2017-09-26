@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <!--背景颜色-->
-    <solid android:color="#00000000" />
+    <solid android:color="#FFFFFF" />
     <!--控制圆角大小-->
     <corners android:radius="6dp" />
     <!--控制边界线颜色和大小-->

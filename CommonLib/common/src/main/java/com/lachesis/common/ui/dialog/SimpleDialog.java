@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.text.InputFilter;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,24 +25,24 @@ import com.lachesis.common.R;
 
 /**
  * 标准对话框
- *
+ * <p>
  * 如果想要只显示一个按钮，只setLeftButton就可以了
- *
+ * <p>
  * 使用示例：
  * SimpleDialog simpleDialog = new SimpleDialog(this);
  * simpleDialog.setTitle("内存卡提示")
- *          .setText("内存卡空间不足，无法录像，是否需要格式内存卡？")
- *          .setLeftButton(null)
- *          .setRightButton("格式化", new SimpleDialog.OnClickListener() {
- *              @Override
- *              public void onClick(Dialog dialog) {
- *                  // do something
- *                  // ...
- *                  dialog.dismiss();
- *              }
- *          })
- *          .show();
+ * .setText("内存卡空间不足，无法录像，是否需要格式内存卡？")
+ * .setLeftButton(null)
+ * .setRightButton("格式化", new SimpleDialog.OnClickListener() {
  *
+ * @Override public void onClick(Dialog dialog) {
+ * // do something
+ * // ...
+ * dialog.dismiss();
+ * }
+ * })
+ * .show();
+ * <p>
  * Created by zhongweiguang on 2016/12/3.
  */
 
@@ -56,8 +57,8 @@ public class SimpleDialog extends Dialog {
     private ImageView dividerVertical;
     private ListView listview;
 
-    private OnClickListener leftBtnOnClickListener;
-    private OnClickListener rightBtnOnClickListener;
+    private OnButtonClickListener leftBtnOnClickListener;
+    private OnButtonClickListener rightBtnOnClickListener;
     private OnItemClickListener mOnItemClickListener;
 
     public SimpleDialog(Context context) {
@@ -74,7 +75,10 @@ public class SimpleDialog extends Dialog {
         layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         layoutParams.width = width;
         getWindow().setAttributes(layoutParams);
+
+        Log.i("SimpleDialog对话框尺寸","layoutParams.width:"+layoutParams.width+",layoutParams.height:"+layoutParams.height);
     }
+
 
     private void initView(Context context) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -91,28 +95,34 @@ public class SimpleDialog extends Dialog {
         rightBtn = (Button) findViewById(R.id.rightBtn);
         dividerHorizontal = (ImageView) findViewById(R.id.dividerHorizontal);
         dividerVertical = (ImageView) findViewById(R.id.dividerVertical);
-        listview = (ListView)findViewById(R.id.listview);
+        listview = (ListView) findViewById(R.id.listview);
         textTv.setMovementMethod(ScrollingMovementMethod.getInstance());
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(position,view);
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(position, view);
                 }
             }
         });
-        leftBtn.setOnClickListener(v -> {
-            if (leftBtnOnClickListener != null) {
-                leftBtnOnClickListener.onClick(SimpleDialog.this);
-            } else {
-                dismiss();
+        leftBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (leftBtnOnClickListener != null) {
+                    leftBtnOnClickListener.onClick(SimpleDialog.this);
+                } else {
+                    dismiss();
+                }
             }
         });
-        rightBtn.setOnClickListener(v -> {
-            if (rightBtnOnClickListener != null) {
-                rightBtnOnClickListener.onClick(SimpleDialog.this);
-            } else {
-                dismiss();
+        rightBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (rightBtnOnClickListener != null) {
+                    rightBtnOnClickListener.onClick(SimpleDialog.this);
+                } else {
+                    dismiss();
+                }
             }
         });
     }
@@ -222,12 +232,13 @@ public class SimpleDialog extends Dialog {
         mOnItemClickListener = onItemClicListener;
         return this;
     }
+
     /**
      * 会显示布局中默认的文字“取消”
      *
      * @param listener 设置null时，点击会自动dismiss()
      */
-    public SimpleDialog setLeftButton(OnClickListener listener) {
+    public SimpleDialog setLeftButton(OnButtonClickListener listener) {
         leftBtnOnClickListener = listener;
 
         leftBtn.setVisibility(View.VISIBLE);
@@ -238,7 +249,7 @@ public class SimpleDialog extends Dialog {
     /**
      * @param listener 设置null时，点击会自动dismiss()
      */
-    public SimpleDialog setLeftButton(String text, OnClickListener listener) {
+    public SimpleDialog setLeftButton(String text, OnButtonClickListener listener) {
         leftBtnOnClickListener = listener;
 
         leftBtn.setText(text);
@@ -250,7 +261,7 @@ public class SimpleDialog extends Dialog {
     /**
      * @param listener 设置null时，点击会自动dismiss()
      */
-    public SimpleDialog setLeftButton(@StringRes int resId, OnClickListener listener) {
+    public SimpleDialog setLeftButton(@StringRes int resId, OnButtonClickListener listener) {
         leftBtnOnClickListener = listener;
         leftBtn.setText(resId);
         leftBtn.setVisibility(View.VISIBLE);
@@ -263,7 +274,7 @@ public class SimpleDialog extends Dialog {
      *
      * @param listener 设置null时，点击会自动dismiss()
      */
-    public SimpleDialog setRightButton(OnClickListener listener) {
+    public SimpleDialog setRightButton(OnButtonClickListener listener) {
         rightBtnOnClickListener = listener;
 
         rightBtn.setVisibility(View.VISIBLE);
@@ -274,7 +285,7 @@ public class SimpleDialog extends Dialog {
     /**
      * @param listener 设置null时，点击会自动dismiss()
      */
-    public SimpleDialog setRightButton(String text, OnClickListener listener) {
+    public SimpleDialog setRightButton(String text, OnButtonClickListener listener) {
         rightBtnOnClickListener = listener;
 
         rightBtn.setText(text);
@@ -286,12 +297,46 @@ public class SimpleDialog extends Dialog {
     /**
      * @param listener 设置null时，点击会自动dismiss()
      */
-    public SimpleDialog setRightButton(@StringRes int resId, OnClickListener listener) {
+    public SimpleDialog setRightButton(@StringRes int resId, OnButtonClickListener listener) {
         rightBtnOnClickListener = listener;
 
         rightBtn.setText(resId);
         rightBtn.setVisibility(View.VISIBLE);
         dividerVertical.setVisibility(View.VISIBLE);
+        return this;
+    }
+
+    public SimpleDialog setBackground(int color){
+
+        return this;
+    }
+
+    public SimpleDialog setTitleTextColor(int color){
+        titleTv.setTextColor(color);
+        return this;
+    }
+
+    public SimpleDialog setContentTextColor(int color){
+        textTv.setTextColor(color);
+        return this;
+    }
+
+    public SimpleDialog setLeftBtnTextColor(int color){
+        leftBtn.setTextColor(color);
+        return this;
+    }
+    public SimpleDialog setRightBtnTextColor(int color){
+        rightBtn.setTextColor(color);
+        return this;
+    }
+
+    public SimpleDialog updateLeftButtonText(String text) {
+        leftBtn.setText(text);
+        return this;
+    }
+
+    public SimpleDialog updateRightButtonText(String text) {
+        rightBtn.setText(text);
         return this;
     }
 
@@ -311,13 +356,13 @@ public class SimpleDialog extends Dialog {
         return titleTv;
     }
 
-    public interface OnClickListener {
+    public interface OnButtonClickListener {
 
         void onClick(Dialog dialog);
 
     }
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onItemClick(int position, View view);
     }
 }

@@ -35,7 +35,7 @@ public class InstallEventReceiver extends BroadcastReceiver {
 
             Log.i(TAG, packageName + "替换成功");
 
-            AppUpgradeManager.getInstance().doAfterInstalled(packageName);
+//            AppUpgradeManager.getInstance().doAfterInstalled(packageName);
         }
     }
 }

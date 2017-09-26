@@ -1,22 +1,31 @@
 package com.lachesis.appupgradeservice;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.lachesis.appupgradeservice.modules.upgrade.controller.core.AppUpgradeManager;
 import com.lachesis.appupgradeservice.modules.upgrade.controller.service.UpgradeService;
 import com.lachesis.appupgradeservice.share.NetApiConfig;
+import com.lachesis.common.ui.dialog.LoadingDialog;
+import com.lachesis.common.ui.dialog.SimpleDialog;
+import com.lachesis.common.utils.ScreenUtils;
 
 public class MainActivity extends AppCompatActivity {
 
     private static String TAG = "MainActivity";
 
     private EditText inputUrl;
+    private SimpleDialog upgradeTipDialog;
+    private LoadingDialog loadingDialog;
+    private LoadingDialog completeTipDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,16 +33,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         inputUrl = (EditText)this.findViewById(R.id.url_edit);
+
+        int width = ScreenUtils.getScreenWidth();
+        int height = ScreenUtils.getScreenHeight();
+        Log.i("ScreenUtils","width:"+width+",height:"+height);
     }
 
 
     public void onStartInstall(View view){
 
-//        String url = inputUrl.getText().toString();
+        String url = inputUrl.getText().toString();
 
-//        if(url != null && url.startsWith("http://")){
-//            NetApiConfig.SERVER_HOST = url;
-//        }
+        if(url != null && url.startsWith("http://")){
+            NetApiConfig.SERVER_HOST = url;
+        }
 
         Log.i(TAG,"start UpgradeService ...}");
         Intent intent = new Intent(this, UpgradeService.class);
@@ -61,6 +74,52 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void onShowUpgradeTip(View view){
+        if(upgradeTipDialog != null && upgradeTipDialog.isShowing()){
+            upgradeTipDialog.dismiss();
+        }
+        upgradeTipDialog = new SimpleDialog(this)
+                .setTitle("发现新版本")
+                .setText("升级内容")
+                .setTitleTextColor(Color.parseColor("#FF0000"))
+                .setContentTextColor(Color.parseColor("#FFFF0000"))//0xFFFF0000)
+                .setLeftBtnTextColor(Color.parseColor("#C9CACA"))//0xC9CACA)
+                .setRightBtnTextColor(Color.parseColor("#0000FF"))//0x0000FF)
+                .setLeftButton("稍后更新", new SimpleDialog.OnButtonClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog) {
+                        upgradeTipDialog.dismiss();
+                    }
+                })
+                .setRightButton("立即更新", new SimpleDialog.OnButtonClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog) {
+                        upgradeTipDialog.dismiss();
+                    }
+                });
+
+        upgradeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        upgradeTipDialog.show();
+    }
 
 
+    public void onShowLoading(View view){
+        if(loadingDialog != null && loadingDialog.isShowing()){
+            loadingDialog.dismiss();
+        }
+
+        loadingDialog = new LoadingDialog(this)
+                .setText("正在更新...")
+                .setTextColor(Color.parseColor("#000000"));
+        loadingDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        loadingDialog.show();
+    }
+
+    public void onShowComplete(View view){
+        completeTipDialog = new LoadingDialog(this,R.drawable.update_complete)
+                .setText("完成更新！")
+                .setTextColor(Color.parseColor("#000000"));
+        completeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        completeTipDialog.show();
+    }
 }
