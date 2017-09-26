@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        upgradeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+//        upgradeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         upgradeTipDialog.show();
     }
 
@@ -111,15 +111,15 @@ public class MainActivity extends AppCompatActivity {
         loadingDialog = new LoadingDialog(this)
                 .setText("正在更新...")
                 .setTextColor(Color.parseColor("#000000"));
-        loadingDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+//        loadingDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         loadingDialog.show();
     }
 
     public void onShowComplete(View view){
         completeTipDialog = new LoadingDialog(this,R.drawable.update_complete)
-                .setText("完成更新！")
+                .setText("完成更新!")
                 .setTextColor(Color.parseColor("#000000"));
-        completeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+//        completeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         completeTipDialog.show();
     }
 }
