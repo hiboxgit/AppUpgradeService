@@ -31,7 +31,7 @@ public class UpgradeReceiver extends BroadcastReceiver {
     }
 
     public void startService(Context context, String action) {
-        Log.i("startService action={}", action);
+        Log.i("startService action=", action);
         Intent intent = new Intent(context, UpgradeService.class);
         intent.setAction(action);
         context.startService(intent);

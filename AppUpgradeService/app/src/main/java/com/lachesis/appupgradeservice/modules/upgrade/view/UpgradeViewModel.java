@@ -2,7 +2,10 @@ package com.lachesis.appupgradeservice.modules.upgrade.view;
 
 import android.app.Application;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -53,8 +56,8 @@ public class UpgradeViewModel {
         upgradeTipDialog = new SimpleDialog(context)
                 .setTitle("发现新版本")
                 .setText("升级内容")
-                .setTitleTextColor(Color.parseColor("#FF0000"))
-                .setContentTextColor(Color.parseColor("#FFFF0000"))//0xFFFF0000)
+                .setTitleTextColor(Color.parseColor("#000000"))
+                .setContentTextColor(Color.parseColor("#000000"))//0xFFFF0000)
                 .setLeftBtnTextColor(Color.parseColor("#C9CACA"))//0xC9CACA)
                 .setRightBtnTextColor(Color.parseColor("#0000FF"))//0x0000FF)
                 .setLeftButton("稍后更新", new SimpleDialog.OnButtonClickListener() {
@@ -74,7 +77,7 @@ public class UpgradeViewModel {
                     }
                 });
 
-        upgradeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        upgradeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);
         upgradeTipDialog.show();
 
         //开始倒计时任务
@@ -113,7 +116,7 @@ public class UpgradeViewModel {
                     loadingDialog = new LoadingDialog(context)
                             .setText(" 正在更新...")
                             .setTextColor(Color.parseColor("#000000"));
-                    loadingDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                    loadingDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);
                     loadingDialog.show();
                 });
     }
@@ -132,7 +135,7 @@ public class UpgradeViewModel {
                     completeTipDialog = new LoadingDialog(context, R.drawable.update_complete)
                             .setText("完成更新!")
                             .setTextColor(Color.parseColor("#000000"));
-                    completeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                    completeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);
                     completeTipDialog.show();
 
                     dismissCompleteSubscription = TaskUtils.delay2Do(3)
@@ -176,8 +179,10 @@ public class UpgradeViewModel {
         if(host !=null && !host.equals("")){
             serverConfigDialog.setInputText(host);
         }
-        serverConfigDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+
+        serverConfigDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);
         serverConfigDialog.show();
+
     }
 
     public void cancelCountTask(){

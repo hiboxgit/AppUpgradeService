@@ -75,8 +75,6 @@ public class SimpleDialog extends Dialog {
         layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         layoutParams.width = width;
         getWindow().setAttributes(layoutParams);
-
-        Log.i("SimpleDialog对话框尺寸","layoutParams.width:"+layoutParams.width+",layoutParams.height:"+layoutParams.height);
     }
 
 

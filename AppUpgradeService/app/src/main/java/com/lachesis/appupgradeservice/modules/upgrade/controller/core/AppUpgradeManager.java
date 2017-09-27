@@ -91,7 +91,7 @@ public class AppUpgradeManager {
     public void upgrade() {
         Log.i(TAG, "开始升级...");
         cancelTimerCheckTask();
-        timerCheckTaskSubscription = TaskUtils.interval(1, 60)
+        timerCheckTaskSubscription = TaskUtils.interval(0, 60)
                 .observeOn(Schedulers.newThread())
                 .subscribe(s -> {
                     Log.i(TAG, "定时检查更新，到点了:" + s);
@@ -105,11 +105,17 @@ public class AppUpgradeManager {
                                     getUpgradeViewModel().onSetServer(new IBaseAsyncHandler() {
                                         @Override
                                         public void onSuccess(Object result) {
-                                            cancelInitCheckUpdateTask();
-                                            initCheckUpdateSubscription = TaskUtils.runSubThread()
-                                                    .subscribe(s2 -> {
-                                                        checkUpdate();
-                                                    });
+
+                                            if(RunDataHelper.getInstance().hasValidServerHost()){
+                                                cancelInitCheckUpdateTask();
+                                                initCheckUpdateSubscription = TaskUtils.runSubThread()
+                                                        .subscribe(s2 -> {
+                                                            checkUpdate();
+                                                        });
+                                            }else{
+                                                Log.e(TAG,"服务器地址配置错误，不尽进行更新检查");
+                                            }
+
                                         }
 
                                         @Override
