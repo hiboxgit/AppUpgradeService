@@ -1,11 +1,14 @@
 package com.lachesis.common;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.lachesis.common.utils.AppUtils;
 import com.lachesis.common.utils.Utils;
 import com.liulishuo.filedownloader.FileDownloader;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -51,4 +54,6 @@ public class CommonLib {
     public Application getContext() {
         return context;
     }
+
 }
+
