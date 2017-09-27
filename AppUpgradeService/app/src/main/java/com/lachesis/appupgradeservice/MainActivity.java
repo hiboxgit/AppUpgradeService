@@ -13,9 +13,12 @@ import android.widget.Toast;
 
 import com.lachesis.appupgradeservice.modules.upgrade.controller.core.AppUpgradeManager;
 import com.lachesis.appupgradeservice.modules.upgrade.controller.service.UpgradeService;
+import com.lachesis.appupgradeservice.share.Constants;
 import com.lachesis.appupgradeservice.share.NetApiConfig;
+import com.lachesis.appupgradeservice.share.RunDataHelper;
 import com.lachesis.common.ui.dialog.LoadingDialog;
 import com.lachesis.common.ui.dialog.SimpleDialog;
+import com.lachesis.common.utils.SPUtils;
 import com.lachesis.common.utils.ScreenUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private SimpleDialog upgradeTipDialog;
     private LoadingDialog loadingDialog;
     private LoadingDialog completeTipDialog;
+    private SimpleDialog serverConfigDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         loadingDialog = new LoadingDialog(this)
-                .setText("正在更新...")
+                .setText(" 正在更新...")
                 .setTextColor(Color.parseColor("#000000"));
 //        loadingDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         loadingDialog.show();
@@ -121,5 +125,38 @@ public class MainActivity extends AppCompatActivity {
                 .setTextColor(Color.parseColor("#000000"));
 //        completeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         completeTipDialog.show();
+    }
+
+    public void onSetServer(View view){
+
+
+        serverConfigDialog = new SimpleDialog(this)
+                        .setTitle("升级服务器配置")
+                        .setInputHint("请输入升级服务器地址")
+                        .setTitleTextColor(Color.parseColor("#000000"))
+                        .setInputTextColor(Color.parseColor("#000000"))//0xFFFF0000)
+                        .setLeftBtnTextColor(Color.parseColor("#000000"))//0xC9CACA)
+                        .setRightBtnTextColor(Color.parseColor("#000000"))//0x0000FF)
+                        .setLeftButton("取消", new SimpleDialog.OnButtonClickListener() {
+                            @Override
+                            public void onClick(Dialog dialog) {
+                                serverConfigDialog.dismiss();
+                            }
+                        })
+                        .setRightButton("确定", new SimpleDialog.OnButtonClickListener() {
+                            @Override
+                            public void onClick(Dialog dialog) {
+                                serverConfigDialog.dismiss();
+
+                                RunDataHelper.getInstance().setServerHostConfig(serverConfigDialog.getInputText());
+                            }
+                        });
+
+        String host = RunDataHelper.getInstance().getServerHostConfig();
+        if(host !=null && !host.equals(""))
+        serverConfigDialog.setInputText(host);
+
+//        upgradeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        serverConfigDialog.show();
     }
 }

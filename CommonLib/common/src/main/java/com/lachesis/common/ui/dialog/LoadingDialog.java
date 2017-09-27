@@ -2,9 +2,9 @@ package com.lachesis.common.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.util.Log;
@@ -17,16 +17,9 @@ import android.widget.TextView;
 
 import com.facebook.common.util.UriUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
-import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.drawee.controller.ControllerListener;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.animated.base.AbstractAnimatedDrawable;
-import com.facebook.imagepipeline.image.ImageInfo;
 import com.lachesis.common.R;
-
-import java.lang.reflect.Field;
 
 
 /**
@@ -45,9 +38,14 @@ public class LoadingDialog extends Dialog {
         initView(context);
     }
 
+    public LoadingDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
+        super(context, R.style.SimpleDialog);
+        initView(context);
+    }
+
     public LoadingDialog(Context context, int resId) {
         super(context, R.style.SimpleDialog);
-        initView(context,resId);
+        initView(context, resId);
     }
 
     @Override
@@ -62,7 +60,7 @@ public class LoadingDialog extends Dialog {
         getWindow().setGravity(Gravity.CENTER);
         getWindow().setAttributes(layoutParams);
 
-        Log.i("LoadingDialog对话框尺寸","layoutParams.width:"+layoutParams.width+",layoutParams.height:"+layoutParams.height);
+        Log.i("LoadingDialog对话框尺寸", "layoutParams.width:" + layoutParams.width + ",layoutParams.height:" + layoutParams.height);
     }
 
     private void initView(Context context) {
@@ -76,54 +74,18 @@ public class LoadingDialog extends Dialog {
         textTv = (TextView) findViewById(R.id.textView);
         simpleDraweeView = (SimpleDraweeView) findViewById(R.id.simpleDraweeView);
 
-//        DraweeController draweeController =
-//                Fresco.newDraweeControllerBuilder()
-//                        .setUri("asset:///loading/loading.gif")
-//                        .setOldController(simpleDraweeView.getController())
-//                        .setAutoPlayAnimations(true)
-//                        .build();
-//        simpleDraweeView.setController(draweeController);
-
-
-        ControllerListener controllerListener = new BaseControllerListener<ImageInfo>() {
-            @Override
-            public void onFinalImageSet(
-                    String id,
-                    @Nullable ImageInfo imageInfo,
-                    @Nullable Animatable anim) {
-                if (anim != null) {
-                    // 其他控制逻辑
-                    Log.i("","开始播放gif");
-                    anim.start();
-                }
-            }
-
-        };
-
-
-        Uri uri = new Uri.Builder()
-                .scheme(UriUtil.LOCAL_RESOURCE_SCHEME)
-                .path(String.valueOf(R.drawable.loading))
-                .build();
+//        Uri uri = new Uri.Builder()
+//                .scheme(UriUtil.LOCAL_RESOURCE_SCHEME)
+//                .path(String.valueOf(R.drawable.loading))
+//                .build();
 
         DraweeController draweeController = Fresco.newDraweeControllerBuilder()
                 .setAutoPlayAnimations(true)
                 .setOldController(simpleDraweeView.getController())
-//                .setControllerListener(controllerListener)
-//                .setUri(uri)//设置uri
-//                .setUri(Uri.parse("http://img.huofar.com/data/jiankangrenwu/shizi.gif"))
                 .setUri("asset:///loading/loading.gif")
                 .build();
 
         simpleDraweeView.setController(draweeController);
-
-
-//        PipelineDraweeControllerBuilder pipelineDraweeControllerBuilder = Fresco.newDraweeControllerBuilder().setAutoPlayAnimations(false);
-//        DraweeController draweeController = pipelineDraweeControllerBuilder.setUri(uri)
-//                .setControllerListener(controllerListener)
-//                .setAutoPlayAnimations(true)
-//                .build();
-//        simpleDraweeView.setController(draweeController);
 
     }
 

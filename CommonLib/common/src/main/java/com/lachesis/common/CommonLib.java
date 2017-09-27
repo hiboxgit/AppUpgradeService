@@ -34,7 +34,7 @@ public class CommonLib {
         Utils.init(context);
 
         //初始化FileDownloader 文件下载框架
-        FileDownloader.init(context);
+        FileDownloader.setupOnApplicationOnCreate(context);
 
         //初始化数据库框架
         Realm.init(context);

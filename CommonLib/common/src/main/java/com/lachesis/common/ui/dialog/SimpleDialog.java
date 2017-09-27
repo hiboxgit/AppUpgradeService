@@ -340,6 +340,11 @@ public class SimpleDialog extends Dialog {
         return this;
     }
 
+    public SimpleDialog setInputTextColor(int color){
+        editText.setTextColor(color);
+        editText.setVisibility(View.VISIBLE);
+        return this;
+    }
     public Button getLeftBtn() {
         return leftBtn;
     }

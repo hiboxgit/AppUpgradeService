@@ -8,6 +8,6 @@ package com.lachesis.appupgradeservice.share;
 
 public class Constants {
 
-    public static final String UPGRADE_BROADCAST_INTENT_EXTRA_ACTION = "extra_action";
+    public static final String SP_KEY_UPGRADE_SERVER_HOST = "SP_KEY_UPGRADE_SERVER_HOST";
 
 }

@@ -24,5 +24,6 @@ public class MyApplication extends Application {
 
     private void init(){
         CommonLib.getInstance().init(this);
+        RunDataHelper.getInstance().init();
     }
 }
