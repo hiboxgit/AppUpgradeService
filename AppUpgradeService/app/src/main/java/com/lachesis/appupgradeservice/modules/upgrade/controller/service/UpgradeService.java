@@ -1,6 +1,7 @@
 package com.lachesis.appupgradeservice.modules.upgrade.controller.service;
 
 import android.app.Dialog;
+import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -44,16 +45,12 @@ public class UpgradeService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        EventBus.getDefault().unregister(this);
-        EventBus.getDefault().register(this);
+        setForegroundService();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -74,10 +71,11 @@ public class UpgradeService extends Service {
             return START_NOT_STICKY;
         }
 
+        Log.i(TAG,"onStartCommand:"+action);
         switch (action) {
 
             case BroadCastConstants.ACTION_DEVICE_BOOT: {
-
+                AppUpgradeManager.getInstance().upgrade();
 
                 break;
             }
@@ -93,96 +91,11 @@ public class UpgradeService extends Service {
         return START_NOT_STICKY;
     }
 
-    @Subscribe
-    public void onEventMainThread(UpgradeTipEvent event) {
-        Log.i(TAG, "弹框提示有更新...");
-        upgradeTipDialog = new SimpleDialog(this)
-                .setTitle("发现新版本")
-                .setText(event.getNote())
-                .setTitleTextColor(0x000000)
-                .setLeftBtnTextColor(0xC9CACA)
-                .setRightBtnTextColor(0x0000FF)
-                .setLeftButton("稍后更新", new SimpleDialog.OnButtonClickListener() {
-                    @Override
-                    public void onClick(Dialog dialog) {
-                        cancelCountTask();
-                        upgradeTipDialog.dismiss();
-
-                        AppUpgradeManager.getInstance().delay2ShowUpradeDialog();
-                    }
-                })
-                .setRightButton("立即更新", new SimpleDialog.OnButtonClickListener() {
-                    @Override
-                    public void onClick(Dialog dialog) {
-                        cancelCountTask();
-                        startUpdate();
-                    }
-                });
-
-        upgradeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        upgradeTipDialog.show();
-
-        //开始倒计时任务
-        cancelCountTask();
-        countTaskSubscription = TaskUtils.countdown(10)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Integer>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.i(TAG,"倒计时完成");
-                        cancelCountTask();
-                        startUpdate();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.i(TAG,"更新倒计时出错");
-                    }
-
-                    @Override
-                    public void onNext(Integer integer) {
-                        Log.i(TAG,"更新倒计时："+integer);
-                        upgradeTipDialog.updateRightButtonText("立即更新("+integer+"s)");
-                    }
-                });
-
-    }
-
-    @Subscribe
-    public void onEventMainThread(UpgradeCompleteEvent event) {
-        Log.i(TAG, "弹框提示升级成功...");
-        if (loadingDialog != null && loadingDialog.isShowing()) {
-            loadingDialog.dismiss();
-        }
-
-        completeTipDialog = new SimpleDialog(this)
-                .setTitle("升级成功！");
-        completeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        completeTipDialog.show();
-
-        AppUpgradeManager.getInstance().delay2Do(3, new Runnable() {
-            @Override
-            public void run() {
-                completeTipDialog.dismiss();
-            }
-        });
-    }
-
-    public void cancelCountTask(){
-        if(countTaskSubscription != null && countTaskSubscription.isUnsubscribed()){
-            countTaskSubscription.unsubscribe();
-            countTaskSubscription = null;
-        }
-    }
-
-    public void startUpdate(){
-        upgradeTipDialog.dismiss();
-
-//        loadingDialog = new LoadingDialog(UpgradeService.this)
-//                .setText("正在更新...")
-//                .setTextColor(0x000000);
-//        loadingDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-//        loadingDialog.show();
-        AppUpgradeManager.getInstance().install();
+    private void setForegroundService(){
+        Notification notification = new Notification();
+        notification.flags = Notification.FLAG_ONGOING_EVENT;
+        notification.flags |= Notification.FLAG_NO_CLEAR;
+        notification.flags |= Notification.FLAG_FOREGROUND_SERVICE;
+        startForeground(1, notification);
     }
 }

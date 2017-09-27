@@ -34,7 +34,6 @@ public class UpgradeReceiver extends BroadcastReceiver {
         Log.i("startService action={}", action);
         Intent intent = new Intent(context, UpgradeService.class);
         intent.setAction(action);
-//        intent.putExtra(Constants.UPGRADE_BROADCAST_INTENT_EXTRA_ACTION, action);
         context.startService(intent);
     }
 }

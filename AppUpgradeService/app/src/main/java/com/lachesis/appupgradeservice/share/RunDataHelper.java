@@ -1,7 +1,9 @@
 package com.lachesis.appupgradeservice.share;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.lachesis.common.ui.dialog.LoadingDialog;
 import com.lachesis.common.utils.SPUtils;
 
 /**
@@ -62,7 +64,38 @@ public class RunDataHelper {
     }
 
     public void setServerHostConfig(String serverHostConfig) {
+        if(!serverHostConfig.endsWith("/")){
+            serverHostConfig = serverHostConfig+"/";
+        }
         this.serverHostConfig = serverHostConfig;
         spAgent.putString(Constants.SP_KEY_UPGRADE_SERVER_HOST,serverHostConfig);
+    }
+
+    public boolean hasValidServerHost(){
+
+        if(serverHostConfig!=null){
+            Log.i(TAG,"serverHostConfig :"+serverHostConfig);
+        }else{
+            Log.i(TAG,"serverHostConfig = null");
+        }
+
+        if(serverHostConfig.isEmpty()){
+            Log.i(TAG,"serverHostConfig isEmpty");
+        }
+
+        if(!serverHostConfig.startsWith("http://")){
+            Log.i(TAG,"serverHostConfig not start http://");
+        }
+        if(!serverHostConfig.endsWith("/")){
+            Log.i(TAG,"serverHostConfig not end /");
+        }
+
+        if(serverHostConfig!=null &&
+                !serverHostConfig.isEmpty() &&
+                serverHostConfig.startsWith("http://") &&
+                serverHostConfig.endsWith("/")){
+            return true;
+        }
+        return false;
     }
 }

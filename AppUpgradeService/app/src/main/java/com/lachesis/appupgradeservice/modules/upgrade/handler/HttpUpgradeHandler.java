@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeRequestBean;
 import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeResponseBean;
 import com.lachesis.appupgradeservice.share.NetApiConfig;
+import com.lachesis.appupgradeservice.share.RunDataHelper;
 import com.lachesis.common.network.RetrofitManager;
 
 import java.util.List;
@@ -28,6 +29,6 @@ public class HttpUpgradeHandler {
 
 
     public static IUpgradeApi getUpgradeService(){
-        return RetrofitManager.getInstance().getRetrofit(NetApiConfig.SERVER_HOST).create(IUpgradeApi.class);
+        return RetrofitManager.getInstance().getRetrofit(RunDataHelper.getInstance().getServerHostConfig()).create(IUpgradeApi.class);
     }
 }

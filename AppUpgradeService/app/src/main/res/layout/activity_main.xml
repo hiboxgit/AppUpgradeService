@@ -53,6 +53,7 @@
         android:layout_below="@id/btn_control"
         android:text="http://10.2.13.61:9099/"
         android:hint="请输入URL地址..."
+        android:visibility="gone"
         tools:text="url地址"/>
 
 

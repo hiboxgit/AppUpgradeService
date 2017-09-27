@@ -48,33 +48,26 @@ public class MainActivity extends AppCompatActivity {
 
         String url = inputUrl.getText().toString();
 
-        if(url != null && url.startsWith("http://")){
-            NetApiConfig.SERVER_HOST = url;
-        }
-
         Log.i(TAG,"start UpgradeService ...}");
-        Intent intent = new Intent(this, UpgradeService.class);
-        this.startService(intent);
 
+        AppUpgradeManager.getInstance().upgrade(new AppUpgradeManager.UpgradeCallBack() {
+            @Override
+            public void onComplete() {
 
-            AppUpgradeManager.getInstance().upgrade(new AppUpgradeManager.UpgradeCallBack() {
-                @Override
-                public void onComplete() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast toast=Toast.makeText(getApplicationContext(), "升级成功", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                });
+            }
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast toast=Toast.makeText(getApplicationContext(), "升级成功", Toast.LENGTH_SHORT);
-                            toast.show();
-                        }
-                    });
-                }
+            @Override
+            public void onError() {
 
-                @Override
-                public void onError() {
-
-                }
-            });
+            }
+        });
     }
 
 
@@ -128,8 +121,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSetServer(View view){
-
-
         serverConfigDialog = new SimpleDialog(this)
                         .setTitle("升级服务器配置")
                         .setInputHint("请输入升级服务器地址")

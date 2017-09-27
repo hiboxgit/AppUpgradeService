@@ -7,10 +7,7 @@ import com.liulishuo.filedownloader.FileDownloadQueueSet;
 import com.liulishuo.filedownloader.FileDownloader;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.function.BiConsumer;
-
 
 /**
  * Created by boxue.hao on 2017/9/22.
@@ -71,41 +68,23 @@ public class HttpTool {
         final FileDownloadQueueSet queueSet = new FileDownloadQueueSet(downloadListener);
         final List<BaseDownloadTask> tasks = new ArrayList<>();
 
-        for(int i=0; i<downloaderConfigList.size(); i++){
+        for (int i = 0; i < downloaderConfigList.size(); i++) {
             DownloaderConfigBean config = downloaderConfigList.get(i);
             tasks.add(FileDownloader.getImpl()
                     .create(config.getRemotePath())
                     .setPath(config.getLocalPath())
                     .setTag(config.getTag()));
         }
-
-        queueSet.disableCallbackProgressTimes(); // Do not need for each task callback `FileDownloadListener#progress`,
-// We just consider which task will complete. so in this way reduce ipc will be effective optimization.
-
-// Each task will auto retry 1 time if download fail.
+        queueSet.disableCallbackProgressTimes();
         queueSet.setAutoRetryTimes(1);
 
-
-
         if (isParallel) {
-            // Start parallel download.
             queueSet.downloadTogether(tasks);
-            // If your tasks are not a list, invoke such following will more readable:
-//    queueSet.downloadTogether(
-//            FileDownloader.getImpl().create(url).setPath(...),
-//            FileDownloader.getImpl().create(url).setPath(...),
-//            FileDownloader.getImpl().create(url).setSyncCallback(true)
-//    );
-        }else{
-            // Start downloading in serial order.
+        } else {
             queueSet.downloadSequentially(tasks);
-            // If your tasks are not a list, invoke such following will more readable:
-//      queueSet.downloadSequentially(
-//              FileDownloader.getImpl().create(url).setPath(...),
-//              FileDownloader.getImpl().create(url).addHeader(...,...),
-//              FileDownloader.getImpl().create(url).setPath(...)
-//      );
         }
         queueSet.start();
     }
+
+
 }
