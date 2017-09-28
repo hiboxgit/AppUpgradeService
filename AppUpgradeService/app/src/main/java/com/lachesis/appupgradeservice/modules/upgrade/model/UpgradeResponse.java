@@ -4,7 +4,7 @@ package com.lachesis.appupgradeservice.modules.upgrade.model;
  * Created by Robert on 2017/9/21.
  */
 
-public class UpgradeResponseBean {
+public class UpgradeResponse {
 
     private String createPerson;
     private String createTime;

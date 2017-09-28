@@ -4,7 +4,7 @@ package com.lachesis.appupgradeservice.modules.upgrade.model;
  * Created by Robert on 2017/9/21.
  */
 
-public class UpgradeRequestBean {
+public class UpgradeRequest {
 
     private String softMark;
     private int softVersion;

@@ -12,3 +12,4 @@ public class BroadCastConstants {
     public static final String ACTION_APP_UPGRADE = "lachesis.intent.action.APP_UPGRADE";
 
 }
+

@@ -48,8 +48,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 
-
     //集成公共功能模块
     compile project(':CommonLib:common')
-
 }

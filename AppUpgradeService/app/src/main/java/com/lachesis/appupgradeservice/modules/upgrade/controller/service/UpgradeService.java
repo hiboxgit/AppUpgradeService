@@ -1,28 +1,18 @@
 package com.lachesis.appupgradeservice.modules.upgrade.controller.service;
 
-import android.app.Dialog;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.WindowManager;
 
 import com.lachesis.appupgradeservice.modules.upgrade.controller.core.AppUpgradeManager;
-import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeCompleteEvent;
-import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeTipEvent;
 import com.lachesis.appupgradeservice.share.BroadCastConstants;
 import com.lachesis.appupgradeservice.share.Constants;
 import com.lachesis.common.ui.dialog.LoadingDialog;
 import com.lachesis.common.ui.dialog.SimpleDialog;
-import com.lachesis.common.utils.TaskUtils;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
-import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * app升级管理类
@@ -72,7 +62,7 @@ public class UpgradeService extends Service {
             return START_NOT_STICKY;
         }
 
-        Log.i(TAG,"onStartCommand:"+action);
+        Log.i(TAG, "onStartCommand:" + action);
         switch (action) {
 
             case BroadCastConstants.ACTION_DEVICE_BOOT: {
@@ -92,7 +82,7 @@ public class UpgradeService extends Service {
         return START_NOT_STICKY;
     }
 
-    private void setForegroundService(){
+    private void setForegroundService() {
         Notification notification = new Notification();
         notification.flags = Notification.FLAG_ONGOING_EVENT;
         notification.flags |= Notification.FLAG_NO_CLEAR;

@@ -2,18 +2,13 @@ package com.lachesis.appupgradeservice.modules.upgrade.view;
 
 import android.app.Application;
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
-import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
 
 import com.lachesis.appupgradeservice.R;
 import com.lachesis.appupgradeservice.modules.upgrade.controller.core.AppUpgradeManager;
 import com.lachesis.appupgradeservice.share.RunDataHelper;
-import com.lachesis.common.CommonLib;
 import com.lachesis.common.base.IBaseAsyncHandler;
 import com.lachesis.common.ui.dialog.LoadingDialog;
 import com.lachesis.common.ui.dialog.SimpleDialog;
@@ -51,8 +46,8 @@ public class UpgradeViewModel {
         this.context = context;
     }
 
-    public void onShowUpgradeTip(){
-        if(upgradeTipDialog != null && upgradeTipDialog.isShowing()){
+    public void onShowUpgradeTip() {
+        if (upgradeTipDialog != null && upgradeTipDialog.isShowing()) {
             upgradeTipDialog.dismiss();
         }
         upgradeTipDialog = new SimpleDialog(context)
@@ -89,29 +84,29 @@ public class UpgradeViewModel {
                 .subscribe(new Subscriber<Integer>() {
                     @Override
                     public void onCompleted() {
-                        Log.i(TAG,"倒计时完成");
+                        Log.i(TAG, "倒计时完成");
                         cancelCountTask();
                         startUpdate();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.i(TAG,"更新倒计时出错");
+                        Log.i(TAG, "更新倒计时出错");
                     }
 
                     @Override
                     public void onNext(Integer integer) {
-                        Log.i(TAG,"更新倒计时："+integer);
-                        upgradeTipDialog.updateRightButtonText("立即更新("+integer+"s)");
+                        Log.i(TAG, "更新倒计时：" + integer);
+                        upgradeTipDialog.updateRightButtonText("立即更新(" + integer + "s)");
                     }
                 });
     }
 
 
-    public void onShowLoading(){
+    public void onShowLoading() {
         showRunningSubscription = TaskUtils.runMainThread()
-                .subscribe(s->{
-                    if(loadingDialog != null && loadingDialog.isShowing()){
+                .subscribe(s -> {
+                    if (loadingDialog != null && loadingDialog.isShowing()) {
                         loadingDialog.dismiss();
                     }
 
@@ -123,12 +118,12 @@ public class UpgradeViewModel {
                 });
     }
 
-    public void onShowComplete(){
-        Log.i(TAG,"显示完成对话框.");
+    public void onShowComplete() {
+        Log.i(TAG, "显示完成对话框.");
         showCompleteSubscription = TaskUtils.runMainThread()
-                .subscribe(s->{
-                    Log.i(TAG,"开始显示完成对话框.");
-                    if(loadingDialog != null && loadingDialog.isShowing()){
+                .subscribe(s -> {
+                    Log.i(TAG, "开始显示完成对话框.");
+                    if (loadingDialog != null && loadingDialog.isShowing()) {
                         loadingDialog.dismiss();
                     }
 //                    if(completeTipDialog != null && completeTipDialog.isShowing()){
@@ -142,9 +137,9 @@ public class UpgradeViewModel {
 
                     dismissCompleteSubscription = TaskUtils.delay2Do(3)
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(s1->{
-                                Log.i(TAG,"时间到，完成窗口消失");
-                                if(completeTipDialog != null &&completeTipDialog.isShowing()){
+                            .subscribe(s1 -> {
+                                Log.i(TAG, "时间到，完成窗口消失");
+                                if (completeTipDialog != null && completeTipDialog.isShowing()) {
                                     completeTipDialog.dismiss();
                                 }
 
@@ -153,7 +148,7 @@ public class UpgradeViewModel {
                 });
     }
 
-    public void onSetServer(IBaseAsyncHandler callback){
+    public void onSetServer(IBaseAsyncHandler callback) {
         serverConfigDialog = new SimpleDialog(context)
                 .setTitle("升级服务器配置")
                 .setInputHint("请输入升级服务器地址")
@@ -173,14 +168,14 @@ public class UpgradeViewModel {
                         serverConfigDialog.dismiss();
 
                         RunDataHelper.getInstance().setServerHostConfig(serverConfigDialog.getInputText());
-                        if(callback != null){
+                        if (callback != null) {
                             callback.onSuccess(null);
                         }
                     }
                 });
 
         String host = RunDataHelper.getInstance().getServerHostConfig();
-        if(host !=null && !host.equals("")){
+        if (host != null && !host.equals("")) {
             serverConfigDialog.setInputText(host);
         }
 
@@ -189,14 +184,14 @@ public class UpgradeViewModel {
 
     }
 
-    public void cancelCountTask(){
-        if(countTaskSubscription != null && !countTaskSubscription.isUnsubscribed()){
+    public void cancelCountTask() {
+        if (countTaskSubscription != null && !countTaskSubscription.isUnsubscribed()) {
             countTaskSubscription.unsubscribe();
             countTaskSubscription = null;
         }
     }
 
-    public void startUpdate(){
+    public void startUpdate() {
         upgradeTipDialog.dismiss();
         AppUpgradeManager.getInstance().install();
     }
@@ -214,8 +209,8 @@ public class UpgradeViewModel {
                 });
     }
 
-    public void onShowNoUpgradeTip(){
-        if(noUpgradeTipDialog != null && noUpgradeTipDialog.isShowing()){
+    public void onShowNoUpgradeTip() {
+        if (noUpgradeTipDialog != null && noUpgradeTipDialog.isShowing()) {
             noUpgradeTipDialog.dismiss();
         }
         noUpgradeTipDialog = new SimpleDialog(context)
