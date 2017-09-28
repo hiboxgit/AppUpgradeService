@@ -29,6 +29,8 @@ import rx.schedulers.Schedulers;
 public class UpgradeViewModel {
 
     private static String TAG = "UpgradeViewModel";
+    private static final int DELAY_COUNT = 10; //倒计时时长
+
     Application context;
     private SimpleDialog upgradeTipDialog;
     private LoadingDialog loadingDialog;
@@ -74,12 +76,13 @@ public class UpgradeViewModel {
                     }
                 });
 
+//        upgradeTipDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
         upgradeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);
         upgradeTipDialog.show();
 
         //开始倒计时任务
         cancelCountTask();
-        countTaskSubscription = TaskUtils.countdown(20)
+        countTaskSubscription = TaskUtils.countdown(DELAY_COUNT)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Integer>() {
                     @Override
@@ -126,9 +129,6 @@ public class UpgradeViewModel {
                     if (loadingDialog != null && loadingDialog.isShowing()) {
                         loadingDialog.dismiss();
                     }
-//                    if(completeTipDialog != null && completeTipDialog.isShowing()){
-//                        completeTipDialog.dismiss();
-//                    }
                     completeTipDialog = new LoadingDialog(context, R.drawable.update_complete)
                             .setText("完成更新!")
                             .setTextColor(Color.parseColor("#000000"));
@@ -153,9 +153,9 @@ public class UpgradeViewModel {
                 .setTitle("升级服务器配置")
                 .setInputHint("请输入升级服务器地址")
                 .setTitleTextColor(Color.parseColor("#000000"))
-                .setInputTextColor(Color.parseColor("#000000"))//0xFFFF0000)
-                .setLeftBtnTextColor(Color.parseColor("#000000"))//0xC9CACA)
-                .setRightBtnTextColor(Color.parseColor("#000000"))//0x0000FF)
+                .setInputTextColor(Color.parseColor("#000000"))
+                .setLeftBtnTextColor(Color.parseColor("#000000"))
+                .setRightBtnTextColor(Color.parseColor("#000000"))
                 .setLeftButton("取消", new SimpleDialog.OnButtonClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {

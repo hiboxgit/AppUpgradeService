@@ -371,7 +371,7 @@ public class AppUpgradeManager {
         for (int i = 0; i < installedApkList.size(); i++) { //获取apk版本信息
             item = new UpgradeRequest();
             item.setSoftMark(installedApkList.get(i).getPackageName());
-            item.setSoftVersion(installedApkList.get(i).getVersionCode()); //0);//debug
+            item.setSoftVersion(0);//debuginstalledApkList.get(i).getVersionCode()); //0);//debug
             softwareVersionInfoList.add(item);
         }
         return softwareVersionInfoList;
