@@ -43,31 +43,13 @@ public class MainActivity extends AppCompatActivity {
         Log.i("ScreenUtils","width:"+width+",height:"+height);
     }
 
-
     public void onStartInstall(View view){
 
         String url = inputUrl.getText().toString();
 
         Log.i(TAG,"start UpgradeService ...}");
 
-        AppUpgradeManager.getInstance().upgrade(new AppUpgradeManager.UpgradeCallBack() {
-            @Override
-            public void onComplete() {
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast toast=Toast.makeText(getApplicationContext(), "升级成功", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                });
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        });
+        AppUpgradeManager.getInstance().upgrade(null);
     }
 
 

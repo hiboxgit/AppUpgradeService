@@ -36,11 +36,11 @@
             android:name=".modules.upgrade.controller.broadcast.UpgradeReceiver"
             android:enabled="true"
             android:exported="true">
-            <intent-filter android:priority="2">
+            <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
-            <intent-filter android:priority="2">
-                <action android:name="lachesis.intent.action.UPGRADE_START"/>
+            <intent-filter>
+                <action android:name="lachesis.intent.action.APP_UPGRADE"/>
             </intent-filter>
         </receiver>
 

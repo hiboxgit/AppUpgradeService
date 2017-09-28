@@ -9,9 +9,6 @@ package com.lachesis.appupgradeservice.share;
 public class BroadCastConstants {
 
     public static final String ACTION_DEVICE_BOOT = "android.intent.action.BOOT_COMPLETED";
-    /**
-     * 升级相关
-     */
-    public static final String ACTION_UPGRADE_START_UPGRADE = "lachesis.intent.action.UPGRADE_START";
+    public static final String ACTION_APP_UPGRADE = "lachesis.intent.action.APP_UPGRADE";
 
 }

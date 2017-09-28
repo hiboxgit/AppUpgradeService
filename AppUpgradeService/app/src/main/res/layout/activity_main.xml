@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
-        android:text="升级la"
+        android:text="升级"
         android:onClick="onStartInstall"/>
     <LinearLayout
         android:id="@+id/btn_control"

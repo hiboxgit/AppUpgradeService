@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import com.lachesis.appupgradeservice.R;
 import com.lachesis.appupgradeservice.modules.upgrade.controller.core.AppUpgradeManager;
 import com.lachesis.appupgradeservice.share.RunDataHelper;
+import com.lachesis.common.CommonLib;
 import com.lachesis.common.base.IBaseAsyncHandler;
 import com.lachesis.common.ui.dialog.LoadingDialog;
 import com.lachesis.common.ui.dialog.SimpleDialog;
@@ -38,6 +39,7 @@ public class UpgradeViewModel {
     private LoadingDialog loadingDialog;
     private LoadingDialog completeTipDialog;
     private SimpleDialog serverConfigDialog;
+    private SimpleDialog noUpgradeTipDialog;
 
     private Subscription countTaskSubscription;
     private Subscription showRunningSubscription;
@@ -145,6 +147,8 @@ public class UpgradeViewModel {
                                 if(completeTipDialog != null &&completeTipDialog.isShowing()){
                                     completeTipDialog.dismiss();
                                 }
+
+                                AppUpgradeManager.getInstance().onUpgradeStopRun();
                             });
                 });
     }
@@ -209,4 +213,24 @@ public class UpgradeViewModel {
                     onShowUpgradeTip();
                 });
     }
+
+    public void onShowNoUpgradeTip(){
+        if(noUpgradeTipDialog != null && noUpgradeTipDialog.isShowing()){
+            noUpgradeTipDialog.dismiss();
+        }
+        noUpgradeTipDialog = new SimpleDialog(context)
+                .setTitle("当前为最新版本")
+                .setTitleTextColor(Color.parseColor("#000000"))
+                .setLeftBtnTextColor(Color.parseColor("#000000"))
+                .setLeftButton("确定", new SimpleDialog.OnButtonClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog) {
+                        noUpgradeTipDialog.dismiss();
+                    }
+                });
+
+        noUpgradeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);
+        noUpgradeTipDialog.show();
+    }
+
 }

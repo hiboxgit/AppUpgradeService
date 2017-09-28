@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.lachesis.appupgradeservice.modules.upgrade.controller.service.UpgradeService;
+import com.lachesis.appupgradeservice.share.BroadCastConstants;
+import com.lachesis.appupgradeservice.share.Constants;
 
 public class UpgradeReceiver extends BroadcastReceiver {
 
@@ -15,25 +17,14 @@ public class UpgradeReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // TODO: This method is called when the BroadcastReceiver is receiving
         // an Intent broadcast.
+        Log.i(TAG,"onReceive action="+intent.getAction());
 
-        if (intent == null) {
-            return;
+
+        Intent serviceIntent = new Intent(context, UpgradeService.class);
+        serviceIntent.setAction(intent.getAction());
+        if(intent.getAction().equals(BroadCastConstants.ACTION_APP_UPGRADE)){
+            serviceIntent.putExtra(Constants.EXTRA_KEY_PACKAGE_NAME,intent.getStringExtra(Constants.EXTRA_KEY_PACKAGE_NAME));
         }
-
-        String action = intent.getAction();
-        if (action == null) {
-            Log.i(TAG,"onReceive action=null, return");
-            return;
-        }
-
-        Log.i(TAG,"onReceive action="+action);
-        startService(context, action);
-    }
-
-    public void startService(Context context, String action) {
-        Log.i("startService action=", action);
-        Intent intent = new Intent(context, UpgradeService.class);
-        intent.setAction(action);
-        context.startService(intent);
+        context.startService(serviceIntent);
     }
 }

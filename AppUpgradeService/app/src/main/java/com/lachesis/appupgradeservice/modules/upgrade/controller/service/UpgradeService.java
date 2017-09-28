@@ -12,6 +12,7 @@ import com.lachesis.appupgradeservice.modules.upgrade.controller.core.AppUpgrade
 import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeCompleteEvent;
 import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeTipEvent;
 import com.lachesis.appupgradeservice.share.BroadCastConstants;
+import com.lachesis.appupgradeservice.share.Constants;
 import com.lachesis.common.ui.dialog.LoadingDialog;
 import com.lachesis.common.ui.dialog.SimpleDialog;
 import com.lachesis.common.utils.TaskUtils;
@@ -79,9 +80,9 @@ public class UpgradeService extends Service {
 
                 break;
             }
-            case BroadCastConstants.ACTION_UPGRADE_START_UPGRADE: {
-
-
+            case BroadCastConstants.ACTION_APP_UPGRADE: {
+                String packageName = intent.getStringExtra(Constants.EXTRA_KEY_PACKAGE_NAME);
+                AppUpgradeManager.getInstance().upgradeByPackageName(packageName);
                 break;
             }
             default:

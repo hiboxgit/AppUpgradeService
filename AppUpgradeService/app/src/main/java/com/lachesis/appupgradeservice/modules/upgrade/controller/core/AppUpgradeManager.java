@@ -44,7 +44,7 @@ public class AppUpgradeManager {
 
     private static AppUpgradeManager instance = new AppUpgradeManager();
 
-    private static final String APK_PREFIX = "com.lachesis";
+    private static final String APK_PREFIX = "com.lachesis"; //用于找出指定包名前缀的已安装APK
     private String updateNote = "升级内容";
     private boolean hasFailedInstallTask;
     private UpgradeCallBack callBack;
@@ -58,17 +58,23 @@ public class AppUpgradeManager {
     private Subscription installTaskSubscription;
     private Subscription delay2DoSubscription;
 
-    List<UpgradePackageInfo> upgradePackageInfoList = new ArrayList<>();
-    private List<UpgradeResponseBean> upgradeResponseList;
-    private List<UpgradeConfigInfo> wait2InstallList;
-    private int downloadApkCount;
-    private int installedApkCount;
+    List<UpgradePackageInfo> upgradePackageInfoList;
+//    private List<UpgradeResponseBean> upgradeResponseList;
+    private int downloadTaskCount; //下载任务执行完毕了几个，不论成功或者失败都认为是完成了
+    private int installTaskCount;
 
     private UpgradeViewModel upgradeViewModel;
+
+    /* 专为广播通知的单个APK主动更新请求 */
+    private boolean isUpgradeRunning;
+    private boolean isAssignUpgrade;
+    private String assignUpgradePackageName;
 
     public AppUpgradeManager() {
         installEventReceiver = new InstallEventReceiver();
         upgradeViewModel = new UpgradeViewModel(CommonLib.getInstance().getContext());
+        upgradePackageInfoList = new ArrayList<>();
+        isUpgradeRunning = false;
     }
 
     public static AppUpgradeManager getInstance() {
@@ -91,46 +97,66 @@ public class AppUpgradeManager {
     public void upgrade() {
         Log.i(TAG, "开始升级...");
         cancelTimerCheckTask();
-        timerCheckTaskSubscription = TaskUtils.interval(0, 60)
+        timerCheckTaskSubscription = TaskUtils.interval(1, 60)
                 .observeOn(Schedulers.newThread())
                 .subscribe(s -> {
                     Log.i(TAG, "定时检查更新，到点了:" + s);
-                    if (RunDataHelper.getInstance().hasValidServerHost()) {
-                        Log.i(TAG, "升级服务器已经配置且有效");
-                        checkUpdate();
-                    } else {
-                        cancelHostCheckTask();
-                        hostCheckTaskSubscription = TaskUtils.runMainThread()
-                                .subscribe(s1 -> {
-                                    getUpgradeViewModel().onSetServer(new IBaseAsyncHandler() {
-                                        @Override
-                                        public void onSuccess(Object result) {
-
-                                            if(RunDataHelper.getInstance().hasValidServerHost()){
-                                                cancelInitCheckUpdateTask();
-                                                initCheckUpdateSubscription = TaskUtils.runSubThread()
-                                                        .subscribe(s2 -> {
-                                                            checkUpdate();
-                                                        });
-                                            }else{
-                                                Log.e(TAG,"服务器地址配置错误，不尽进行更新检查");
-                                            }
-
-                                        }
-
-                                        @Override
-                                        public void onError(Object result) {
-
-                                        }
-
-                                        @Override
-                                        public void onComplete(Object result) {
-
-                                        }
-                                    });
-                                });
+                    if(!isUpgradeRunning){
+                        isAssignUpgrade = false;
+                        upgradeStart();
+                    }else{
+                        Log.i(TAG, "已经有升级在跑了...");
                     }
+
                 });
+    }
+
+    public void upgradeByPackageName(String packageName){
+        if(isUpgradeRunning){
+            return;
+        }
+        isAssignUpgrade = true;
+        assignUpgradePackageName = packageName;
+        upgradeStart();
+    }
+
+    private void upgradeStart(){
+        onUpgradeStartRun();
+        if (RunDataHelper.getInstance().hasValidServerHost()) {
+            Log.i(TAG, "升级服务器已经配置且有效");
+            checkUpdate();
+        } else {
+            cancelHostCheckTask();
+            hostCheckTaskSubscription = TaskUtils.runMainThread()
+                    .subscribe(s1 -> {
+                        getUpgradeViewModel().onSetServer(new IBaseAsyncHandler() {
+                            @Override
+                            public void onSuccess(Object result) {
+
+                                if(RunDataHelper.getInstance().hasValidServerHost()){
+                                    cancelInitCheckUpdateTask();
+                                    initCheckUpdateSubscription = TaskUtils.runSubThread()
+                                            .subscribe(s2 -> {
+                                                checkUpdate();
+                                            });
+                                }else{
+                                    Log.e(TAG,"服务器地址配置错误，不进行更新检查");
+                                    onUpgradeStopRun();
+                                }
+
+                            }
+                            @Override
+                            public void onError(Object result) {
+
+                            }
+
+                            @Override
+                            public void onComplete(Object result) {
+
+                            }
+                        });
+                    });
+        }
     }
 
     private void cancelTimerCheckTask() {
@@ -158,7 +184,6 @@ public class AppUpgradeManager {
 
     public void checkUpdate() {
         Log.i(TAG, "开始检查更新...");
-        upgradeResponseList = null;
         List<UpgradeRequestBean> requestData = getApkVersionInfo();
         checkUpdateSubscription = HttpUpgradeHandler.checkApkUpdate(requestData)
                 .subscribeOn(Schedulers.io())
@@ -168,8 +193,9 @@ public class AppUpgradeManager {
 
                     if (result == null || result.size() == 0) {
                         Log.i(TAG, "无有效更新内容！");
+                        onUpgradeStopRun();
                     } else {
-                        upgradeResponseList = new ArrayList<UpgradeResponseBean>();
+                        List<UpgradeResponseBean> upgradeResponseList = new ArrayList<UpgradeResponseBean>();
                         upgradeResponseList.clear();
                         for (int i = 0; i < result.size(); i++) {
                             if (result.get(i).getSoftPath() != null && !result.get(i).getSoftPath().equals("")) {
@@ -181,6 +207,7 @@ public class AppUpgradeManager {
                             download(upgradeResponseList);
                         } else {
                             Log.i(TAG, "无可用升级包！");
+                            onUpgradeStopRun();
                         }
                     }
 
@@ -192,8 +219,6 @@ public class AppUpgradeManager {
     public void download(List<UpgradeResponseBean> upgradeInfoList) {
         Log.i(TAG, "开始下载...:" + upgradeInfoList.size());
         upgradePackageInfoList.clear();
-        wait2InstallList = new ArrayList<UpgradeConfigInfo>();
-        wait2InstallList.clear();
 
         Log.i(TAG, "准备循环...");
         for (int i = 0; i < upgradeInfoList.size(); i++) {
@@ -204,20 +229,27 @@ public class AppUpgradeManager {
             String localPath = SDCardUtils.getSDCardPath() + "ApkFiles/" + i + ".apk";
             String host = RunDataHelper.getInstance().getServerHostConfig();
             String remoteUrl = host.substring(0, host.length() - 1) + upgradeInfoList.get(i).getSoftPath();
-            upgradePackageInfoList.add(new UpgradePackageInfo(softMark, remoteUrl, localPath));
-
-            Log.i(TAG, "添加到待升级列表->localPath:" + localPath + ",remoteUrl:" + remoteUrl);
-
-            wait2InstallList.add(new UpgradeConfigInfo(localPath));
+            Log.i(TAG, "准备添加到待升级列表->localPath:" + localPath + ",remoteUrl:" + remoteUrl+",softMark:"+softMark);
+            if(!isAssignUpgrade){
+                upgradePackageInfoList.add(new UpgradePackageInfo(softMark, remoteUrl, localPath));
+            }else{
+                if(assignUpgradePackageName.equals(softMark)){
+                    upgradePackageInfoList.add(new UpgradePackageInfo(softMark, remoteUrl, localPath));
+                }
+            }
         }
 
-        if (wait2InstallList.size() <= 0) {
+        if (upgradePackageInfoList.size() <= 0) {
             Log.i(TAG, "没有下载任务可用...");
+            onUpgradeStopRun();
+            if(isAssignUpgrade){
+                onNoUpdate();
+            }
             return;
         }
         Log.i(TAG, "开始多任务下载...");
         //下载队列任务开始
-        downloadApkCount = 0;
+        downloadTaskCount = 0;
         List<DownloaderConfigBean> downloaderConfigList = new ArrayList<>();
         for (int i = 0; i < upgradePackageInfoList.size(); i++) {
             UpgradePackageInfo item = upgradePackageInfoList.get(i);
@@ -247,6 +279,7 @@ public class AppUpgradeManager {
             @Override
             protected void completed(BaseDownloadTask task) {
                 Log.i(TAG, "升级包" + task.getTag() + "下载完成 ");
+                updateDownloadStatus(task.getTag().toString(),true);
                 doOnEachDownloadTaskComplete();
             }
 
@@ -258,6 +291,7 @@ public class AppUpgradeManager {
             @Override
             protected void error(BaseDownloadTask task, Throwable e) {
                 Log.i(TAG, "升级包" + task.getTag() + "下载失败");
+                updateDownloadStatus(task.getTag().toString(),false);
                 doOnEachDownloadTaskComplete();
             }
 
@@ -268,9 +302,27 @@ public class AppUpgradeManager {
         });
     }
 
+    private void updateDownloadStatus(String tag, boolean isDownloaded){
+        for(int i=0;i<upgradePackageInfoList.size();i++){
+            if(upgradePackageInfoList.get(i).getSoftMark().equals(tag)){
+                upgradePackageInfoList.get(i).setDownloaded(isDownloaded);
+                return;
+            }
+        }
+    }
+
+    private int countDownloadedSuccessPackages(){
+        int count = 0;
+        for(int i=0;i<upgradePackageInfoList.size();i++){
+            if(upgradePackageInfoList.get(i).isDownloaded()){
+                count++;
+            }
+        }
+        return count;
+    }
     private void doOnEachDownloadTaskComplete() {
-        downloadApkCount++;
-        if (upgradeResponseList.size() == downloadApkCount) {
+        downloadTaskCount++;
+        if (upgradePackageInfoList.size() == downloadTaskCount) {
             //全部下载完毕
             doOnCompleteDownload();
         }
@@ -296,10 +348,17 @@ public class AppUpgradeManager {
 
                     //然后再开始安装
                     registerApkInstallReceiver(CommonLib.getInstance().getContext());
-                    installedApkCount = 0;
+                    installTaskCount = 0;
                     hasFailedInstallTask = false;
-                    for (int i = 0; i < wait2InstallList.size(); i++) {
-                        doIntallApk(wait2InstallList.get(i).getLocalPath());
+
+                    if(countDownloadedSuccessPackages() == 0){
+                        onUpgradeStopRun();
+                        return;
+                    }
+                    for (int i = 0; i < upgradePackageInfoList.size(); i++) {
+                        if(upgradePackageInfoList.get(i).isDownloaded()){
+                            doIntallApk(upgradePackageInfoList.get(i).getLocalPath());
+                        }
                     }
                 });
     }
@@ -315,7 +374,7 @@ public class AppUpgradeManager {
         for (int i = 0; i < installedApkList.size(); i++) { //获取apk版本信息
             item = new UpgradeRequestBean();
             item.setSoftMark(installedApkList.get(i).getPackageName());
-            item.setSoftVersion(0);//installedApkList.get(i).getVersionCode()); debug
+            item.setSoftVersion(installedApkList.get(i).getVersionCode()); //0);//debug
             softwareVersionInfoList.add(item);
         }
         return softwareVersionInfoList;
@@ -341,14 +400,14 @@ public class AppUpgradeManager {
 
         Log.i(TAG, packageName + " has been installed!");
 
-        installedApkCount++;
+        installTaskCount++;
 
         //删除升级包
         String apkPath = getApkFilePathByName(packageName);
         Log.i(TAG, "准备删除已经安装过的升级包:" + apkPath);
         FileUtils.deleteFile(apkPath);
 
-        if (installedApkCount == downloadApkCount) {
+        if (installTaskCount == countDownloadedSuccessPackages()) {
             Log.i(TAG, "全部安装完毕！");
             if (callBack != null) {
                 callBack.onComplete();
@@ -356,11 +415,11 @@ public class AppUpgradeManager {
 
             }
 
-            //通知安装完毕
-            getUpgradeViewModel().onShowComplete();
-
             //取消安装监听器
             unRegisterApkInstallReceiver(CommonLib.getInstance().getContext());
+
+            //通知安装完毕
+            getUpgradeViewModel().onShowComplete();
         }
     }
 
@@ -405,6 +464,16 @@ public class AppUpgradeManager {
         }
     }
 
+    public void onUpgradeStartRun(){
+        isUpgradeRunning = true;
+    }
+    public void onUpgradeStopRun(){
+        isUpgradeRunning = false;
+    }
+
+    private void onNoUpdate(){
+        getUpgradeViewModel().onShowNoUpgradeTip();
+    }
     public static interface UpgradeCallBack {
 
         public void onComplete();
