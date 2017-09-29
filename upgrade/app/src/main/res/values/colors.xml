@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="iot_main_common_bg_color">#2cc4d3</color>
+    <color name="iot_main_font_common_color">#ffffff</color>
+    <color name="iot_font_error_color">#dddddd</color>
+    <color name="iot_progressColor">#ffffff</color>
+    <color name="iot_ringColor">#20f0f0f0</color>
+    <color name="colorPrimary">#ff02DF82</color>
+    <color name="colorPrimaryDark">#ff0080FF</color>
+    <color name="colorAccent">#ff02DF82</color>
+    <color name="translucent_background">#00000000</color>
+</resources>

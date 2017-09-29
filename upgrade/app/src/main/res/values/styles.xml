@@ -1,0 +1,30 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="MyButton" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">#2cc4d3</item>
+        <item name="colorButtonNormal">#1cb4c3</item>
+        <item name="android:background">@drawable/selector_button_normal</item>
+    </style>
+
+    <style name="NoticeActionTheme" parent="Theme.AppCompat.NoActionBar">
+        <!--<item name="colorBackgroundCacheHint">@null</item>-->
+        <!--<item name="windowIsTranslucent">true</item>-->
+
+        <!--<item name="windowNoTitle">true</item>-->
+        <!--<item name="windowContentOverlay">@null</item>-->
+    </style>
+    <style name="translucent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/translucent_background</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
+    </style>
+</resources>

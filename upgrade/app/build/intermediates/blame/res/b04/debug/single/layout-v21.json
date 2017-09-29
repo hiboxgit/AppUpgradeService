@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/robert/MySpace/work/dudu/projects/upgrade/app/build/intermediates/res/merged/b04/debug/layout-v21/notification_action_tombstone.xml",
+        "source": "/Users/robert/.android/build-cache/bcba059c47e2f826845faa1f4e5382af12400255/output/res/layout-v21/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "/Users/robert/MySpace/work/dudu/projects/upgrade/app/build/intermediates/res/merged/b04/debug/layout-v21/notification_template_custom_big.xml",
+        "source": "/Users/robert/.android/build-cache/bcba059c47e2f826845faa1f4e5382af12400255/output/res/layout-v21/notification_template_custom_big.xml"
+    },
+    {
+        "merged": "/Users/robert/MySpace/work/dudu/projects/upgrade/app/build/intermediates/res/merged/b04/debug/layout-v21/notification_action.xml",
+        "source": "/Users/robert/.android/build-cache/bcba059c47e2f826845faa1f4e5382af12400255/output/res/layout-v21/notification_action.xml"
+    },
+    {
+        "merged": "/Users/robert/MySpace/work/dudu/projects/upgrade/app/build/intermediates/res/merged/b04/debug/layout-v21/notification_template_icon_group.xml",
+        "source": "/Users/robert/.android/build-cache/bcba059c47e2f826845faa1f4e5382af12400255/output/res/layout-v21/notification_template_icon_group.xml"
+    }
+]

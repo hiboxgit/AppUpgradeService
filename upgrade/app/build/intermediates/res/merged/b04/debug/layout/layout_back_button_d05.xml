@@ -1,0 +1,10 @@
+<ImageButton xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/backBtn"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:layout_alignParentBottom="true"
+    android:layout_marginLeft="20dp"
+    android:background="@android:color/transparent"
+    android:padding="13.34dp"
+    android:src="@drawable/button_back_selector_d05" />

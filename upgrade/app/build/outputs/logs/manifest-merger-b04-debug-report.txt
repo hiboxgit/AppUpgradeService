@@ -1,0 +1,209 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:2:1-88:12
+	package
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:2:11-37
+		INJECTED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml
+	android:sharedUserId
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:4:5-46
+	android:versionName
+		INJECTED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:3:11-69
+	android:versionCode
+		INJECTED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml
+uses-permission#android.permission.INTERNET
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:6:5-66
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:6:22-64
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:8:5-80
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:8:22-78
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:10:5-78
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:10:22-76
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:12:5-75
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:12:22-73
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:14:5-80
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:14:22-78
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:16:5-75
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:16:22-72
+uses-permission#android.permission.BLUETOOTH
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:20:5-67
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:20:22-65
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:21:5-73
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:21:22-71
+uses-permission#android.permission.SYSTEM_ALERT_WINDOW
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:23:5-78
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:23:22-75
+application
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:25:5-86:19
+MERGED from [upgrade.commonlib:common:unspecified] /Users/robert/MySpace/work/dudu/projects/commonlib/common/build/intermediates/bundles/default/AndroidManifest.xml:11:5-15:19
+MERGED from [com.android.support:appcompat-v7:25.2.0] /Users/robert/.android/build-cache/bcba059c47e2f826845faa1f4e5382af12400255/output/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-v4:25.2.0] /Users/robert/.android/build-cache/04158f6c71d504c2361d05ed4c5a22511d96fcbb/output/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-fragment:25.2.0] /Users/robert/.android/build-cache/3dac5207c2fbe3b8a8292349dce948374d98e043/output/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-media-compat:25.2.0] /Users/robert/.android/build-cache/0c25a537eb0849f845d9c64e250fb690799e8bf1/output/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-core-ui:25.2.0] /Users/robert/.android/build-cache/24f1e2f57a33c04aa684846569b0c479a3ce3746/output/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-core-utils:25.2.0] /Users/robert/.android/build-cache/9b2ace9e05b6caf5c911ea2c1267cd2878f49e31/output/AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:animated-vector-drawable:25.2.0] /Users/robert/.android/build-cache/a1aad9365d7c1c0b437e7cd545c3d59946917fe1/output/AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:support-vector-drawable:25.2.0] /Users/robert/.android/build-cache/da2afb368ecc67deb0d0fdaebf6ee9702a26febc/output/AndroidManifest.xml:23:5-20
+MERGED from [com.android.support:support-compat:25.2.0] /Users/robert/.android/build-cache/0c08e360532c4e3ad009cedc499e8008a4a6be9c/output/AndroidManifest.xml:25:5-20
+	android:label
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:29:9-41
+	android:supportsRtl
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:30:9-35
+	android:allowBackup
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:27:9-35
+	android:icon
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:28:9-45
+	android:theme
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:31:9-40
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:26:9-59
+activity#com.dudu.upgrade.fota.FotaActivity
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:32:9-38:20
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:32:19-68
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:33:13-37:29
+action#android.intent.action.MAIN
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:34:17-68
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:34:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:36:17-76
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:36:27-74
+activity#com.dudu.upgrade.bt.BtServerActivity
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:39:9-40:20
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:39:19-70
+service#com.dudu.upgrade.UpgradeService
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:42:9-50
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:42:18-48
+service#com.fota.iport.service.DLService
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:45:9-76
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:45:18-65
+receiver#com.fota.iport.receiver.UpgradeReceiver
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:49:9-54:20
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:49:19-73
+intent-filter#android.intent.action.BOOT_COMPLETED+android.net.conn.CONNECTIVITY_CHANGE
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:50:13-53:29
+	android:priority
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:50:28-57
+action#android.net.conn.CONNECTIVITY_CHANGE
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:51:17-78
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:51:25-76
+action#android.intent.action.BOOT_COMPLETED
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:52:17-78
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:52:25-76
+service#com.dudu.upgrade.fota.FotaIntentService
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:57:9-74
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:57:18-72
+receiver#com.dudu.upgrade.UpgradeReceiver
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:59:9-74:20
+	android:label
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:62:13-40
+	android:excludeFromRecents
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:61:13-46
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:60:13-60
+intent-filter#action.dudu.app.check.finished+action.dudu.app.install.finished+action.dudu.app.upgrade.start+action.dudu.fota.check.start+action.dudu.fota.download.cancel+action.dudu.fota.upgrade.debug.start+action.dudu.fota.upgrade.start+action.iport.recovery.upgrade
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:63:13-73:29
+	android:priority
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:63:28-48
+action#action.iport.recovery.upgrade
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:65:17-71
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:65:25-69
+action#action.dudu.fota.check.start
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:66:17-70
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:66:25-68
+action#action.dudu.app.check.finished
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:67:17-72
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:67:25-70
+action#action.dudu.fota.download.cancel
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:68:17-74
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:68:25-72
+action#action.dudu.fota.upgrade.start
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:69:17-72
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:69:25-70
+action#action.dudu.fota.upgrade.debug.start
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:70:17-78
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:70:25-76
+action#action.dudu.app.upgrade.start
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:71:17-71
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:71:25-69
+action#action.dudu.app.install.finished
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:72:17-74
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:72:25-72
+service#com.dudu.upgrade.fota.update.UpdateService
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:76:9-79:19
+	android:exported
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:78:13-37
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:77:13-70
+activity#com.dudu.upgrade.fota.update.NoticeSelfActivity
+ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:81:9-85:20
+	android:launchMode
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:83:13-44
+	android:theme
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:84:13-47
+	android:name
+		ADDED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml:82:13-75
+uses-sdk
+INJECTED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+MERGED from [com.android.support:multidex:1.0.1] /Users/robert/.android/build-cache/434d6920a891ec283dab572a18efedeadce42f58/output/AndroidManifest.xml:18:5-42
+MERGED from [upgrade.commonlib:common:unspecified] /Users/robert/MySpace/work/dudu/projects/commonlib/common/build/intermediates/bundles/default/AndroidManifest.xml:7:5-9:41
+MERGED from [com.facebook.fresco:fresco:1.0.1] /Users/robert/.android/build-cache/060bccb8260740dbeded1f8dcea9af6b7ef74244/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:drawee:1.0.1] /Users/robert/.android/build-cache/0c4cc5fd8656006b82db5bc130e0cc8645fb6677/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:animated-gif:1.0.1] /Users/robert/.android/build-cache/1fefe267142238c81cc0d06f4dbf668c740b0c99/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:animated-base:1.0.1] /Users/robert/.android/build-cache/1747ff0d8b417a32a5abd0ca3b1829ba9537b3f9/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline:1.0.1] /Users/robert/.android/build-cache/bb553b6aaeaa7dd66ff0f066d089def1126d280e/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:imagepipeline-base:1.0.1] /Users/robert/.android/build-cache/e231ba84d345d1a40e32b7ad5e995c623d5abf4c/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:fbcore:1.0.1] /Users/robert/.android/build-cache/d66c23ff4e98072ad9220a83aed46e0691b19778/output/AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:appcompat-v7:25.2.0] /Users/robert/.android/build-cache/bcba059c47e2f826845faa1f4e5382af12400255/output/AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:support-v4:25.2.0] /Users/robert/.android/build-cache/04158f6c71d504c2361d05ed4c5a22511d96fcbb/output/AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.support:support-fragment:25.2.0] /Users/robert/.android/build-cache/3dac5207c2fbe3b8a8292349dce948374d98e043/output/AndroidManifest.xml:21:5-23:60
+MERGED from [com.android.support:support-media-compat:25.2.0] /Users/robert/.android/build-cache/0c25a537eb0849f845d9c64e250fb690799e8bf1/output/AndroidManifest.xml:21:5-23:63
+MERGED from [com.android.support:support-core-ui:25.2.0] /Users/robert/.android/build-cache/24f1e2f57a33c04aa684846569b0c479a3ce3746/output/AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-core-utils:25.2.0] /Users/robert/.android/build-cache/9b2ace9e05b6caf5c911ea2c1267cd2878f49e31/output/AndroidManifest.xml:21:5-23:61
+MERGED from [com.android.support:animated-vector-drawable:25.2.0] /Users/robert/.android/build-cache/a1aad9365d7c1c0b437e7cd545c3d59946917fe1/output/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:25.2.0] /Users/robert/.android/build-cache/da2afb368ecc67deb0d0fdaebf6ee9702a26febc/output/AndroidManifest.xml:21:5-43
+MERGED from [com.android.support:support-compat:25.2.0] /Users/robert/.android/build-cache/0c08e360532c4e3ad009cedc499e8008a4a6be9c/output/AndroidManifest.xml:21:5-23:58
+	tools:overrideLibrary
+		ADDED from [com.android.support:appcompat-v7:25.2.0] /Users/robert/.android/build-cache/bcba059c47e2f826845faa1f4e5382af12400255/output/AndroidManifest.xml:23:9-75
+	android:targetSdkVersion
+		INJECTED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/AndroidManifest.xml

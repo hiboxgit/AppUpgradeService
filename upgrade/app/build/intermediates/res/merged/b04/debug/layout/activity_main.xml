@@ -1,0 +1,111 @@
+<RelativeLayout android:id="@+id/iot_container"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/iot_main_common_bg_color"
+                android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/iot_main_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/iot_main_title_marginTop"
+        android:text="@string/iot_main_title"
+        android:textColor="@color/iot_main_font_common_color"
+        android:textSize="@dimen/iot_font_main_title"/>
+
+
+    <com.dudu.upgrade.fota.view.CenterCircleView
+        android:id="@+id/view_center_circle"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_below="@id/iot_main_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"/>
+
+    <TextView
+        android:id="@+id/iot_error_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view_center_circle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/iot_font_error_color"
+        android:textSize="@dimen/iot_font_error_tips"
+        tools:text="测试文字"/>
+
+    <TextView
+        android:id="@+id/iot_version_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iot_error_tips"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="@dimen/iot_version_tips_marginTop"
+        android:text="@string/cancel_download"
+        android:textColor="@color/iot_main_font_common_color"
+        android:textSize="@dimen/iot_font_version_tips"
+        tools:text="测试文字iot_version_detail"/>
+
+    <Button
+        android:id="@+id/button_control"
+        android:theme="@style/MyButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="20dp"
+        tools:visibility="visible"
+        android:text="@string/cancel_download"
+        android:layout_marginRight="20dp"
+        tools:text="测试按钮"/>
+
+    <LinearLayout
+        android:id="@+id/iot_ll_release_note"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iot_version_detail"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+
+        <!--<TextView-->
+        <!--android:id="@+id/version_talk"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/version_num"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:text="版本说明:"-->
+        <!--android:textColor="@color/main_font_common_color"-->
+        <!--android:textSize="@dimen/font_version_note" />-->
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/iot_release_note_content"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/iot_main_font_common_color"
+                android:textSize="@dimen/iot_font_version_note"
+                tools:text="测试文字"/>
+
+        </ScrollView>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_transfer_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="传输文件"
+        android:visibility="gone"/>
+
+
+</RelativeLayout>

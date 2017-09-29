@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/robert/MySpace/work/dudu/projects/upgrade/app/build/intermediates/res/merged/b04/debug/drawable-hdpi/ic_upgrading.png",
+        "source": "/Users/robert/MySpace/work/dudu/projects/upgrade/app/src/b04/res/drawable-hdpi/ic_upgrading.png"
+    },
+    {
+        "merged": "/Users/robert/MySpace/work/dudu/projects/upgrade/app/build/intermediates/res/merged/b04/debug/drawable-hdpi/bg.9.png",
+        "source": "/Users/robert/MySpace/work/dudu/projects/upgrade/app/src/main/res/drawable-hdpi/bg.9.png"
+    }
+]

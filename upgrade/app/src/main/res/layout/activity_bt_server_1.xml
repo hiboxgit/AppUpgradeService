@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/iot_main_common_bg_color">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="FOTA服务器"
+        android:textSize="34sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/black"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/textview_center_primary"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_circle"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        tools:text="启动服务"/>
+
+    <TextView
+        android:id="@+id/textview_error_tips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textview_center_primary"
+        android:layout_margin="50dp"
+        android:gravity="center"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="16sp"
+        tools:text="我是错误日志"/>
+
+</RelativeLayout>

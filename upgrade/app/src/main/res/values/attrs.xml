@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="iot_custom_view">
+        <attr name="iot_ringColor" format="reference|color" />
+        <attr name="iot_progressColor" format="reference|color" />
+        <attr name="iot_progressSize" format="integer" />
+        <attr name="iot_diameter" format="integer" />
+        <attr name="iot_integerSize" format="integer" />
+    </declare-styleable>
+
+
+
+</resources>

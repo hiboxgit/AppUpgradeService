@@ -1,0 +1,3 @@
+include ':app', ':bluetooth', ':commonlib'
+project(':commonlib').projectDir = new File('../commonlib/')
+include ':commonlib:common'
