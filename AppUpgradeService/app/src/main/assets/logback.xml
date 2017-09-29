@@ -1,5 +1,5 @@
 <!--debug属性用来决定是否打印logback的日志信息-->
-<configuration debug='false'>
+<configuration debug='true'>
 
     <!--声明一个属性,用来指定log文件存放的路径-->
     <property name="LOG_DIR" value="/sdcard/logback"/>
@@ -33,9 +33,14 @@
             <!--最大保存7天的日志-->
             <maxHistory>7</maxHistory>
         </rollingPolicy>
+
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>5MB</MaxFileSize>
+        </triggeringPolicy>
+
     </appender>
 
-    <!--指定name采用 ref 指定的Appender输出日志-->
+    <!--单独指定name采用 ref 指定的Appender输出日志-->
     <logger name="AppUpgrade" level="DEBUG">
         <appender-ref ref="FILE_LACHESIS_UPGRADE" />
     </logger>
