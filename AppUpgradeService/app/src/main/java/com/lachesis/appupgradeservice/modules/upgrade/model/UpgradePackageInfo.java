@@ -12,6 +12,7 @@ public class UpgradePackageInfo {
     private boolean isDownloaded;
     private boolean isInstalled; //通过比较版本去掉这个字段
     private int downloadedPackageVersionCode;
+    private String updateDsc; //升级描述
 
     public UpgradePackageInfo() {
     }
@@ -20,6 +21,13 @@ public class UpgradePackageInfo {
         this.softMark = softMark;
         this.remoteUrl = remoteUrl;
         this.localPath = localPath;
+    }
+
+    public UpgradePackageInfo(String softMark, String remoteUrl, String localPath, String updateDsc) {
+        this.softMark = softMark;
+        this.remoteUrl = remoteUrl;
+        this.localPath = localPath;
+        this.updateDsc = updateDsc;
     }
 
     public String getSoftMark() {
@@ -68,5 +76,13 @@ public class UpgradePackageInfo {
 
     public void setDownloadedPackageVersionCode(int downloadedPackageVersionCode) {
         this.downloadedPackageVersionCode = downloadedPackageVersionCode;
+    }
+
+    public String getUpdateDsc() {
+        return updateDsc;
+    }
+
+    public void setUpdateDsc(String updateDsc) {
+        this.updateDsc = updateDsc;
     }
 }

@@ -6,6 +6,9 @@ import android.util.Log;
 import com.lachesis.common.ui.dialog.LoadingDialog;
 import com.lachesis.common.utils.SPUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  *  运行状态机类
  *
@@ -15,10 +18,10 @@ import com.lachesis.common.utils.SPUtils;
  */
 
 public class RunDataHelper {
-
+    private static final String TAG = "LxUpgrade";
+    private Logger logger = LoggerFactory.getLogger("LxAppUpgrade");
     private static RunDataHelper instance = new RunDataHelper();
 
-    private static final String TAG = "LxUpgrade";
     /* *
      *
      * 运行状态通用变量
@@ -74,20 +77,20 @@ public class RunDataHelper {
     public boolean hasValidServerHost(){
 
         if(serverHostConfig!=null){
-            Log.i(TAG,"serverHostConfig :"+serverHostConfig);
+            logger.info("serverHostConfig :"+serverHostConfig);
         }else{
-            Log.i(TAG,"serverHostConfig = null");
+            logger.info("serverHostConfig = null");
         }
 
         if(serverHostConfig.isEmpty()){
-            Log.i(TAG,"serverHostConfig isEmpty");
+            logger.info("serverHostConfig isEmpty");
         }
 
         if(!serverHostConfig.startsWith("http://")){
-            Log.i(TAG,"serverHostConfig not start http://");
+            logger.info("serverHostConfig not start http://");
         }
         if(!serverHostConfig.endsWith("/")){
-            Log.i(TAG,"serverHostConfig not end /");
+            logger.info("serverHostConfig not end /");
         }
 
         if(serverHostConfig!=null &&

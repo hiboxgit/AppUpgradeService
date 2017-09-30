@@ -41,11 +41,11 @@
     </appender>
 
     <!--单独指定name采用 ref 指定的Appender输出日志-->
-    <logger name="AppUpgrade" level="DEBUG">
+    <logger name="LxAppUpgrade" level="DEBUG">
         <appender-ref ref="FILE_LACHESIS_UPGRADE" />
     </logger>
 
-    <!-- 对于系统自带的logcat打印 level指定的级别及其以上的日志，并写入文件-->
+    <!-- root 指代系统默认的日志进程，通过appender-ref关联前面指定的日志输出方式-->
     <root level="DEBUG">
         <appender-ref ref="LOGCAT" />
     </root>
