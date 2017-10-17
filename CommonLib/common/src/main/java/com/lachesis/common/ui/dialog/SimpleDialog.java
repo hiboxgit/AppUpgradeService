@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.text.InputFilter;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,7 +95,8 @@ public class SimpleDialog extends Dialog {
         dividerVertical = (ImageView) findViewById(R.id.dividerVertical);
         listview = (ListView) findViewById(R.id.listview);
         textTv.setMovementMethod(ScrollingMovementMethod.getInstance());
-        setButtonBg(context.getResources().getDrawable(R.drawable.upgrade_button_selector));
+        leftBtn.setBackground(context.getResources().getDrawable(R.drawable.button_left_selector));
+        rightBtn.setBackground(context.getResources().getDrawable(R.drawable.button_right_selector));
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -249,7 +249,7 @@ public class SimpleDialog extends Dialog {
     /**
      * @param listener 设置null时，点击会自动dismiss()
      */
-    public SimpleDialog setLeftButton(String text, OnButtonClickListener listener) {
+    public SimpleDialog  setLeftButton(String text, OnButtonClickListener listener) {
         leftBtnOnClickListener = listener;
 
         leftBtn.setText(text);
@@ -346,9 +346,8 @@ public class SimpleDialog extends Dialog {
         return this;
     }
 
-    public SimpleDialog setButtonBg(Drawable drawable){
+    public SimpleDialog setLeftButtonBg(Drawable drawable){
         leftBtn.setBackground(drawable);
-        rightBtn.setBackground(drawable);
         return this;
     }
 
