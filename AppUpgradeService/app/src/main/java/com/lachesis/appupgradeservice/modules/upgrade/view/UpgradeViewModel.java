@@ -8,6 +8,7 @@ import android.view.WindowManager;
 import com.lachesis.appupgradeservice.R;
 import com.lachesis.appupgradeservice.modules.upgrade.controller.core.AppUpgradeManager;
 import com.lachesis.appupgradeservice.share.RunDataHelper;
+import com.lachesis.common.CommonLib;
 import com.lachesis.common.base.IBaseAsyncHandler;
 import com.lachesis.common.ui.dialog.LoadingDialog;
 import com.lachesis.common.ui.dialog.SimpleDialog;
@@ -32,7 +33,6 @@ public class UpgradeViewModel {
 
     private static String TAG = "UpgradeViewModel";
     private Logger logger = LoggerFactory.getLogger("LxAppUpgrade");
-    private static final int DELAY_COUNT = 10; //倒计时时长
 
     Application context;
     private SimpleDialog upgradeTipDialog;
@@ -40,6 +40,7 @@ public class UpgradeViewModel {
     private LoadingDialog completeTipDialog;
     private SimpleDialog serverConfigDialog;
     private SimpleDialog noUpgradeTipDialog;
+    private SimpleDialog downloadFailTipDialog;
 
     private Subscription countTaskSubscription;
     private Subscription showRunningSubscription;
@@ -50,6 +51,7 @@ public class UpgradeViewModel {
     private Subscription hostCheckTaskSubscription;
     private Subscription hostReCheckTaskSubscription;
     private Subscription noUpdateTipSubscription;
+    private Subscription downloadFailTipSubscription;
 
     public UpgradeViewModel(Application context) {
         this.context = context;
@@ -73,7 +75,8 @@ public class UpgradeViewModel {
                                 public void onClick(Dialog dialog) {
                                     upgradeTipDialog.dismiss();
                                     cancelCountTask();
-                                    delay2ShowUpradeDialog();
+//                                    delay2ShowUpradeDialog();
+                                    AppUpgradeManager.getInstance().onUpgradeStopRun();
                                 }
                             })
                             .setRightButton("立即更新", new SimpleDialog.OnButtonClickListener() {
@@ -90,7 +93,7 @@ public class UpgradeViewModel {
 
                     //开始倒计时任务
                     cancelCountTask();
-                    countTaskSubscription = TaskUtils.countdown(DELAY_COUNT)
+                    countTaskSubscription = TaskUtils.countdown(RunDataHelper.getInstance().getDelayInstallTime())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Subscriber<Integer>() {
                                 @Override
@@ -115,6 +118,38 @@ public class UpgradeViewModel {
     }
 
 
+    public void onShowUpgradeConfirmTip(){
+        startUpgradeTipSubscription = TaskUtils.runMainThread()
+                .subscribe(s -> {
+                    if (upgradeTipDialog != null && upgradeTipDialog.isShowing()) {
+                        upgradeTipDialog.dismiss();
+                    }
+                    upgradeTipDialog = new SimpleDialog(context)
+                            .setTitle("发现新版本")
+                            .setText(AppUpgradeManager.getInstance().updateNote)
+                            .setTitleTextColor(Color.parseColor("#000000"))
+                            .setContentTextColor(Color.parseColor("#000000"))//0xFFFF0000)
+                            .setLeftBtnTextColor(Color.parseColor("#C9CACA"))//0xC9CACA)
+                            .setRightBtnTextColor(Color.parseColor("#0000FF"))//0x0000FF)
+                            .setLeftButton("取消", new SimpleDialog.OnButtonClickListener() {
+                                @Override
+                                public void onClick(Dialog dialog) {
+                                    upgradeTipDialog.dismiss();
+                                    AppUpgradeManager.getInstance().onUpgradeStopRun();
+                                }
+                            })
+                            .setRightButton("更新", new SimpleDialog.OnButtonClickListener() {
+                                @Override
+                                public void onClick(Dialog dialog) {
+                                    upgradeTipDialog.dismiss();
+                                    startUpdate();
+                                }
+                            });
+
+                    upgradeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);
+                    upgradeTipDialog.show();
+                });
+    }
     public void onShowLoading() {
         showRunningSubscription = TaskUtils.runMainThread()
                 .subscribe(s -> {
@@ -132,7 +167,7 @@ public class UpgradeViewModel {
 
     public void onShowComplete() {
         logger.info("显示完成对话框.");
-        showCompleteSubscription = TaskUtils.runMainThread()
+        showCompleteSubscription = TaskUtils.delay2DoMainThread(2)
                 .subscribe(s -> {
                     logger.info("开始显示完成对话框.");
                     if (loadingDialog != null && loadingDialog.isShowing()) {
@@ -251,21 +286,21 @@ public class UpgradeViewModel {
 
     public void startUpdate() {
         upgradeTipDialog.dismiss();
-        AppUpgradeManager.getInstance().install();
+        AppUpgradeManager.getInstance().download();
     }
 
-    public void delay2ShowUpradeDialog() {
-        delayShowTipSubscription = Observable.timer(10, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    if (delayShowTipSubscription != null && !delayShowTipSubscription.isUnsubscribed()) {
-                        delayShowTipSubscription.unsubscribe();
-                        delayShowTipSubscription = null;
-                    }
-                    onShowUpgradeTip();
-                });
-    }
+//    public void delay2ShowUpradeDialog() {
+//        delayShowTipSubscription = Observable.timer(10, TimeUnit.SECONDS)
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(result -> {
+//                    if (delayShowTipSubscription != null && !delayShowTipSubscription.isUnsubscribed()) {
+//                        delayShowTipSubscription.unsubscribe();
+//                        delayShowTipSubscription = null;
+//                    }
+//                    onShowUpgradeTip();
+//                });
+//    }
 
     public void onShowNoUpgradeTip() {
         noUpdateTipSubscription = TaskUtils.runMainThread()
@@ -288,5 +323,28 @@ public class UpgradeViewModel {
                     noUpgradeTipDialog.show();
                 });
     }
+
+    public void onShowDownloadFailTip() {
+        downloadFailTipSubscription = TaskUtils.runMainThread()
+                .subscribe(s -> {
+                    if (downloadFailTipDialog != null && downloadFailTipDialog.isShowing()) {
+                        downloadFailTipDialog.dismiss();
+                    }
+                    downloadFailTipDialog = new SimpleDialog(context)
+                            .setTitle("升级包下载失败")
+                            .setTitleTextColor(Color.parseColor("#FF0000"))
+                            .setLeftBtnTextColor(Color.parseColor("#000000"))
+                            .setLeftButton("确定", new SimpleDialog.OnButtonClickListener() {
+                                @Override
+                                public void onClick(Dialog dialog) {
+                                    downloadFailTipDialog.dismiss();
+                                }
+                            });
+
+                    downloadFailTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);
+                    downloadFailTipDialog.show();
+                });
+    }
+
 
 }

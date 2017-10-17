@@ -7,41 +7,63 @@
     android:orientation="vertical"
     tools:context="com.lachesis.appupgradeservice.MainActivity">
 
-    <Button
-        android:id="@+id/start_upgrade"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:id="@+id/btn_set"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_centerHorizontal="true"
-        android:text="升级"
-        android:onClick="onStartInstall"/>
+        android:layout_centerInParent="true"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/start_upgrade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="手动升级"
+            android:onClick="onStartInstall"/>
+        <Button
+            android:id="@+id/btn_set_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设置地址"
+            android:onClick="onSetServer"/>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onSetCheckInterval"
+            android:text="设置间隔" />
+        <CheckBox
+            android:id="@+id/setDebug"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="调试"/>
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/btn_control"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/start_upgrade"
+        android:layout_below="@id/btn_set"
         android:orientation="horizontal">
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="升级选择"
+            android:visibility="gone"
             android:onClick="onShowUpgradeTip"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="更新中"
+            android:visibility="gone"
             android:onClick="onShowLoading"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="升级完毕"
+            android:visibility="gone"
             android:onClick="onShowComplete"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="设置地址"
-            android:onClick="onSetServer"/>
     </LinearLayout>
     <EditText
         android:id="@+id/url_edit"
@@ -53,6 +75,4 @@
         android:hint="请输入URL地址..."
         android:visibility="gone"
         tools:text="url地址"/>
-
-
 </RelativeLayout>

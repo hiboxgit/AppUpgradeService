@@ -11,6 +11,7 @@ public class UpgradePackageInfo {
 
     private boolean isDownloaded;
     private boolean isInstalled; //通过比较版本去掉这个字段
+    private boolean isForeground; //是否是前台app
     private int downloadedPackageVersionCode;
     private String updateDsc; //升级描述
 
@@ -84,5 +85,13 @@ public class UpgradePackageInfo {
 
     public void setUpdateDsc(String updateDsc) {
         this.updateDsc = updateDsc;
+    }
+
+    public boolean isForeground() {
+        return isForeground;
+    }
+
+    public void setForeground(boolean foreground) {
+        isForeground = foreground;
     }
 }

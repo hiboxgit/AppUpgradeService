@@ -30,6 +30,8 @@ public class RunDataHelper {
 
     private SPUtils spAgent;
     private String serverHostConfig;
+    private int delayInstallTime;
+    private int checkInterval;
 
     private RunDataHelper(){
 
@@ -52,6 +54,8 @@ public class RunDataHelper {
 
     private void initParam(){
         serverHostConfig = spAgent.getString(Constants.SP_KEY_UPGRADE_SERVER_HOST,"");
+        delayInstallTime = spAgent.getInt(Constants.SP_KEY_UPGRADE_DELAY_TIME,10); //
+        checkInterval = spAgent.getInt(Constants.SP_KEY_UPGRADE_CHECK_INTERVAL,60);
     }
 
     public SPUtils getSpAgent() {
@@ -67,11 +71,24 @@ public class RunDataHelper {
     }
 
     public void setServerHostConfig(String serverHostConfig) {
-        if(!serverHostConfig.endsWith("/")){
+        if(serverHostConfig!=null &&
+                !serverHostConfig.isEmpty() &&
+                serverHostConfig.startsWith("http://") &&
+                !serverHostConfig.endsWith("/")){
             serverHostConfig = serverHostConfig+"/";
         }
+
         this.serverHostConfig = serverHostConfig;
         spAgent.putString(Constants.SP_KEY_UPGRADE_SERVER_HOST,serverHostConfig);
+    }
+
+    public int getDelayInstallTime() {
+        return delayInstallTime;
+    }
+
+    public void setDelayInstallTime(int delayInstallTime) {
+        this.delayInstallTime = delayInstallTime;
+        spAgent.putInt(Constants.SP_KEY_UPGRADE_DELAY_TIME,this.delayInstallTime);
     }
 
     public boolean hasValidServerHost(){
@@ -100,5 +117,14 @@ public class RunDataHelper {
             return true;
         }
         return false;
+    }
+
+    public int getCheckInterval() {
+        return checkInterval;
+    }
+
+    public void setCheckInterval(int checkInterval) {
+        this.checkInterval = checkInterval;
+        spAgent.putInt(Constants.SP_KEY_UPGRADE_CHECK_INTERVAL,this.checkInterval);
     }
 }

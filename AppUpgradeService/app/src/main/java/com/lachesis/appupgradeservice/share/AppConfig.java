@@ -7,6 +7,8 @@ import com.lachesis.common.utils.SDCardUtils;
  */
 
 public class AppConfig {
+    /* 标识当前是否处于调试状态 */
+    public static Boolean isDebug = false;
     /* 升级包下载路径 */
     public static String APK_DOWNLOAD_DIR = SDCardUtils.getSDCardPath() + "ApkFiles/";
 }

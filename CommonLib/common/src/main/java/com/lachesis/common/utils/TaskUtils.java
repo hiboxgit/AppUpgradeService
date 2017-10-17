@@ -52,4 +52,10 @@ public class TaskUtils {
         return Observable.timer(delaySeconds, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.newThread());
     }
+
+    public static Observable<Long> delay2DoMainThread(int delaySeconds){
+        return Observable.timer(delaySeconds, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

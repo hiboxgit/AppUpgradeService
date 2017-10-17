@@ -2,6 +2,7 @@ package com.lachesis.common.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.text.InputFilter;
@@ -95,6 +96,7 @@ public class SimpleDialog extends Dialog {
         dividerVertical = (ImageView) findViewById(R.id.dividerVertical);
         listview = (ListView) findViewById(R.id.listview);
         textTv.setMovementMethod(ScrollingMovementMethod.getInstance());
+        setButtonBg(context.getResources().getDrawable(R.drawable.upgrade_button_selector));
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -343,6 +345,13 @@ public class SimpleDialog extends Dialog {
         editText.setVisibility(View.VISIBLE);
         return this;
     }
+
+    public SimpleDialog setButtonBg(Drawable drawable){
+        leftBtn.setBackground(drawable);
+        rightBtn.setBackground(drawable);
+        return this;
+    }
+
     public Button getLeftBtn() {
         return leftBtn;
     }

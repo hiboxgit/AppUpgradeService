@@ -10,4 +10,6 @@
     <color name="gradient_start">#00DDE9</color>    <!--渐变起始色-->
     <color name="gradient_end">#1763DA</color>      <!--渐变结束色-->
     <color name="driver_side">#C9CACA</color>
+    <color name="buttonBgBlue">#3F78BF</color>
+    <color name="buttonBgGray">#BFBFBF</color>
 </resources>

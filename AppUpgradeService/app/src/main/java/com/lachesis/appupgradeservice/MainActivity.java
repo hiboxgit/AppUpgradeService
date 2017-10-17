@@ -3,16 +3,20 @@ package com.lachesis.appupgradeservice;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.hardware.camera2.params.StreamConfigurationMap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.lachesis.appupgradeservice.modules.upgrade.controller.core.AppUpgradeManager;
 import com.lachesis.appupgradeservice.modules.upgrade.controller.service.UpgradeService;
+import com.lachesis.appupgradeservice.share.AppConfig;
 import com.lachesis.appupgradeservice.share.Constants;
 import com.lachesis.appupgradeservice.share.NetApiConfig;
 import com.lachesis.appupgradeservice.share.RunDataHelper;
@@ -26,10 +30,12 @@ public class MainActivity extends AppCompatActivity {
     private static String TAG = "MainActivity";
 
     private EditText inputUrl;
+    private CheckBox debugCheck;
     private SimpleDialog upgradeTipDialog;
     private LoadingDialog loadingDialog;
     private LoadingDialog completeTipDialog;
     private SimpleDialog serverConfigDialog;
+    private SimpleDialog setUpdateCheckIntervalDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +43,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         inputUrl = (EditText)this.findViewById(R.id.url_edit);
+        debugCheck = (CheckBox)this.findViewById(R.id.setDebug);
 
+        debugCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                AppConfig.isDebug = isChecked;
+            }
+        });
         int width = ScreenUtils.getScreenWidth();
         int height = ScreenUtils.getScreenHeight();
         Log.i("ScreenUtils","width:"+width+",height:"+height);
@@ -131,5 +144,41 @@ public class MainActivity extends AppCompatActivity {
 
 //        upgradeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         serverConfigDialog.show();
+    }
+
+    public void onSetCheckInterval(View view){
+        setUpdateCheckIntervalDialog = new SimpleDialog(this)
+                .setTitle("自动升级间隔配置")
+                .setInputHint("请输入时间间隔(单位min)")
+                .setTitleTextColor(Color.parseColor("#000000"))
+                .setInputTextColor(Color.parseColor("#000000"))//0xFFFF0000)
+                .setLeftBtnTextColor(Color.parseColor("#000000"))//0xC9CACA)
+                .setRightBtnTextColor(Color.parseColor("#000000"))//0x0000FF)
+                .setLeftButton("取消", new SimpleDialog.OnButtonClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog) {
+                        setUpdateCheckIntervalDialog.dismiss();
+                    }
+                })
+                .setRightButton("确定", new SimpleDialog.OnButtonClickListener() {
+                    @Override
+                    public void onClick(Dialog dialog) {
+                        setUpdateCheckIntervalDialog.dismiss();
+
+                        RunDataHelper.getInstance().setCheckInterval(Integer.valueOf(setUpdateCheckIntervalDialog.getInputText()));
+
+//                        AppUpgradeManager.getInstance().cancelTimerCheckTask();
+//                        AppUpgradeManager.getInstance().upgrade();
+                    }
+                });
+
+        int interval = RunDataHelper.getInstance().getCheckInterval();
+        setUpdateCheckIntervalDialog.setInputText(String.valueOf(interval));
+
+        setUpdateCheckIntervalDialog.show();
+    }
+
+    public void onDebugCheck(View view){
+
     }
 }

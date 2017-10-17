@@ -2,6 +2,7 @@ package com.lachesis.appupgradeservice.modules.upgrade.handler;
 
 import com.google.gson.Gson;
 import com.lachesis.appupgradeservice.modules.upgrade.handler.IRetrofitService.IUpdateService;
+import com.lachesis.appupgradeservice.modules.upgrade.model.ParamSetInfo;
 import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeRequest;
 import com.lachesis.appupgradeservice.modules.upgrade.model.UpgradeResponse;
 import com.lachesis.appupgradeservice.share.RunDataHelper;
@@ -27,6 +28,10 @@ public class UpdateHandler {
                 .checkUpdate(body);
     }
 
+    public static Observable<ParamSetInfo> getUpgradeDelayTime() {
+        return getUpgradeService()
+                .getInstallDelayTime();
+    }
 
     public static IUpdateService getUpgradeService() {
         return RetrofitManager.getInstance().getRetrofit(RunDataHelper.getInstance().getServerHostConfig()).create(IUpdateService.class);
