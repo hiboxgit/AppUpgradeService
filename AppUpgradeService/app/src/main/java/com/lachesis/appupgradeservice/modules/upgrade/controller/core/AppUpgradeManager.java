@@ -60,6 +60,7 @@ public class AppUpgradeManager {
     private Subscription checkUpdateSubscription;
     private Subscription installTaskSubscription;
     private Subscription getDelayTimeTaskSubscription;
+    private Subscription delayEndUgpradeSubscription;
 
     List<UpgradePackageInfo> upgradePackageInfoList;
     //    private int downloadTaskCount; //下载任务执行完毕了几个，不论成功或者失败都认为是完成了
@@ -120,6 +121,7 @@ public class AppUpgradeManager {
 
     public void upgradeByPackageName(String packageName) {
         if (isUpgradeRunning) {
+            logger.info("上次升级任务还未结束!");
             return;
         }
         isAssignUpgrade = true;
@@ -320,6 +322,16 @@ public class AppUpgradeManager {
     }
     public void download() {
         logger.info("开始下载...");
+        //先检查授权
+        ShellUtils.CommandResult commandResult = ShellUtils.execCmd("echo test\n", true);
+        if (commandResult.result != 0) {
+            logger.info("无法获取root权限，采用显式升级");
+            isHideInstall = false;
+        } else {
+            isHideInstall = true;
+            getUpgradeViewModel().onShowLoading();
+        }
+
         //下载队列任务开始
         downloadSuccessCount = 0;
         downloadFailCount = 0;
@@ -420,15 +432,6 @@ public class AppUpgradeManager {
         installTaskSubscription = Observable.just(1)
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(result -> {
-                    //先检查授权
-                    ShellUtils.CommandResult commandResult = ShellUtils.execCmd("echo test\n", true);
-                    if (commandResult.result != 0) {
-                        logger.info("无法获取root权限，采用显式升级");
-                        isHideInstall = false;
-                    } else {
-                        isHideInstall = true;
-                        getUpgradeViewModel().onShowLoading();
-                    }
 
                     //然后再开始安装
                     registerApkInstallReceiver(CommonLib.getInstance().getContext());
@@ -448,6 +451,26 @@ public class AppUpgradeManager {
                             }
 
                         }
+                    }
+                });
+
+        //防止一些异常情况，收不到安装完毕广播，超时自动设置成安装完毕。
+        delayEndUpgrade();
+    }
+
+    private void delayEndUpgrade(){
+        if(delayEndUgpradeSubscription != null && !delayEndUgpradeSubscription.isUnsubscribed()){
+            delayEndUgpradeSubscription.unsubscribe();
+            delayEndUgpradeSubscription = null;
+        }
+
+        delayEndUgpradeSubscription = TaskUtils.delay2Do(60*3)
+                .subscribe(s->{
+                    if(isUpgradeRunning){
+                        logger.info("超时未完成安装，自动设置为完成...");
+                        getUpgradeViewModel().onShowInstallFailTip();
+                        onUpgradeStopRun();
+
                     }
                 });
     }

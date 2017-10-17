@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_focused="true"
-        android:drawable="@color/buttonBgGray"/>
+        android:drawable="@color/buttonBgFocus"/>
     <item android:state_focused="false"
-        android:drawable="@color/colorWhite"/>
+        android:drawable="@drawable/left_btn_bg_unfocus"/>
 </selector>

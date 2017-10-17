@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         inputUrl = (EditText)this.findViewById(R.id.url_edit);
         debugCheck = (CheckBox)this.findViewById(R.id.setDebug);
 
+        debugCheck.setChecked(AppConfig.isDebug);
         debugCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -75,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
                 .setText("升级内容")
                 .setTitleTextColor(Color.parseColor("#FF0000"))
                 .setContentTextColor(Color.parseColor("#FFFF0000"))//0xFFFF0000)
-                .setLeftBtnTextColor(Color.parseColor("#C9CACA"))//0xC9CACA)
-                .setRightBtnTextColor(Color.parseColor("#0000FF"))//0x0000FF)
+                .setLeftBtnTextColor(Color.parseColor("#FFFFFF"))//0xC9CACA)
+                .setRightBtnTextColor(Color.parseColor("#FFFFFF"))//0x0000FF)
                 .setLeftButton("稍后更新", new SimpleDialog.OnButtonClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {
@@ -119,10 +120,10 @@ public class MainActivity extends AppCompatActivity {
         serverConfigDialog = new SimpleDialog(this)
                         .setTitle("升级服务器配置")
                         .setInputHint("请输入升级服务器地址")
-                        .setTitleTextColor(Color.parseColor("#000000"))
-                        .setInputTextColor(Color.parseColor("#000000"))//0xFFFF0000)
-                        .setLeftBtnTextColor(Color.parseColor("#000000"))//0xC9CACA)
-                        .setRightBtnTextColor(Color.parseColor("#000000"))//0x0000FF)
+                        .setInputTextColor(Color.parseColor("#000000"))
+                        .setContentTextColor(Color.parseColor("#000000"))//0xFFFF0000)
+                        .setLeftBtnTextColor(Color.parseColor("#FFFFFF"))//0xC9CACA)
+                        .setRightBtnTextColor(Color.parseColor("#FFFFFF"))//0x0000FF)
                         .setLeftButton("取消", new SimpleDialog.OnButtonClickListener() {
                             @Override
                             public void onClick(Dialog dialog) {
@@ -152,8 +153,8 @@ public class MainActivity extends AppCompatActivity {
                 .setInputHint("请输入时间间隔(单位min)")
                 .setTitleTextColor(Color.parseColor("#000000"))
                 .setInputTextColor(Color.parseColor("#000000"))//0xFFFF0000)
-                .setLeftBtnTextColor(Color.parseColor("#000000"))//0xC9CACA)
-                .setRightBtnTextColor(Color.parseColor("#000000"))//0x0000FF)
+                .setLeftBtnTextColor(Color.parseColor("#FFFFFF"))//0xC9CACA)
+                .setRightBtnTextColor(Color.parseColor("#FFFFFF"))//0x0000FF)
                 .setLeftButton("取消", new SimpleDialog.OnButtonClickListener() {
                     @Override
                     public void onClick(Dialog dialog) {
@@ -167,8 +168,8 @@ public class MainActivity extends AppCompatActivity {
 
                         RunDataHelper.getInstance().setCheckInterval(Integer.valueOf(setUpdateCheckIntervalDialog.getInputText()));
 
-//                        AppUpgradeManager.getInstance().cancelTimerCheckTask();
-//                        AppUpgradeManager.getInstance().upgrade();
+                        AppUpgradeManager.getInstance().cancelTimerCheckTask();
+                        AppUpgradeManager.getInstance().upgrade();
                     }
                 });
 

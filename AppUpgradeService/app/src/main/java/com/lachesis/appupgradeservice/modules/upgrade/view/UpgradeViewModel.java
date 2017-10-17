@@ -41,6 +41,7 @@ public class UpgradeViewModel {
     private SimpleDialog serverConfigDialog;
     private SimpleDialog noUpgradeTipDialog;
     private SimpleDialog downloadFailTipDialog;
+    private SimpleDialog installFailTipDialog;
 
     private Subscription countTaskSubscription;
     private Subscription showRunningSubscription;
@@ -52,6 +53,7 @@ public class UpgradeViewModel {
     private Subscription hostReCheckTaskSubscription;
     private Subscription noUpdateTipSubscription;
     private Subscription downloadFailTipSubscription;
+    private Subscription installFailTipSubscription;
 
     public UpgradeViewModel(Application context) {
         this.context = context;
@@ -68,8 +70,8 @@ public class UpgradeViewModel {
                             .setText(AppUpgradeManager.getInstance().updateNote)
                             .setTitleTextColor(Color.parseColor("#000000"))
                             .setContentTextColor(Color.parseColor("#000000"))//0xFFFF0000)
-                            .setLeftBtnTextColor(Color.parseColor("#C9CACA"))//0xC9CACA)
-                            .setRightBtnTextColor(Color.parseColor("#0000FF"))//0x0000FF)
+                            .setLeftBtnTextColor(Color.parseColor("#FFFFFF"))//0xC9CACA)
+                            .setRightBtnTextColor(Color.parseColor("#FFFFFF"))//0x0000FF)
                             .setLeftButton("稍后更新", new SimpleDialog.OnButtonClickListener() {
                                 @Override
                                 public void onClick(Dialog dialog) {
@@ -129,8 +131,8 @@ public class UpgradeViewModel {
                             .setText(AppUpgradeManager.getInstance().updateNote)
                             .setTitleTextColor(Color.parseColor("#000000"))
                             .setContentTextColor(Color.parseColor("#000000"))//0xFFFF0000)
-                            .setLeftBtnTextColor(Color.parseColor("#C9CACA"))//0xC9CACA)
-                            .setRightBtnTextColor(Color.parseColor("#0000FF"))//0x0000FF)
+                            .setLeftBtnTextColor(Color.parseColor("#FFFFFF"))//0xC9CACA)
+                            .setRightBtnTextColor(Color.parseColor("#FFFFFF"))//0x0000FF)
                             .setLeftButton("取消", new SimpleDialog.OnButtonClickListener() {
                                 @Override
                                 public void onClick(Dialog dialog) {
@@ -200,8 +202,8 @@ public class UpgradeViewModel {
                             .setInputHint("请输入升级服务器地址")
                             .setTitleTextColor(Color.parseColor("#000000"))
                             .setInputTextColor(Color.parseColor("#000000"))
-                            .setLeftBtnTextColor(Color.parseColor("#000000"))
-                            .setRightBtnTextColor(Color.parseColor("#000000"))
+                            .setLeftBtnTextColor(Color.parseColor("#FFFFFF"))
+                            .setRightBtnTextColor(Color.parseColor("#FFFFFF"))
                             .setLeftButton("取消", new SimpleDialog.OnButtonClickListener() {
                                 @Override
                                 public void onClick(Dialog dialog) {
@@ -243,8 +245,8 @@ public class UpgradeViewModel {
                             .setInputHint("请输入升级服务器地址")
                             .setTitleTextColor(Color.parseColor("#FF0000"))
                             .setInputTextColor(Color.parseColor("#000000"))
-                            .setLeftBtnTextColor(Color.parseColor("#000000"))
-                            .setRightBtnTextColor(Color.parseColor("#000000"))
+                            .setLeftBtnTextColor(Color.parseColor("#FFFFFF"))
+                            .setRightBtnTextColor(Color.parseColor("#FFFFFF"))
                             .setLeftButton("取消", new SimpleDialog.OnButtonClickListener() {
                                 @Override
                                 public void onClick(Dialog dialog) {
@@ -311,7 +313,7 @@ public class UpgradeViewModel {
                     noUpgradeTipDialog = new SimpleDialog(context)
                             .setTitle("当前为最新版本")
                             .setTitleTextColor(Color.parseColor("#000000"))
-                            .setLeftBtnTextColor(Color.parseColor("#000000"))
+                            .setLeftBtnTextColor(Color.parseColor("#FFFFFF"))
                             .setLeftButton("确定", new SimpleDialog.OnButtonClickListener() {
                                 @Override
                                 public void onClick(Dialog dialog) {
@@ -319,6 +321,7 @@ public class UpgradeViewModel {
                                 }
                             });
 
+                    noUpgradeTipDialog.setLeftButtonBg(context.getResources().getDrawable(R.drawable.button_down_selector));
                     noUpgradeTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);
                     noUpgradeTipDialog.show();
                 });
@@ -327,13 +330,16 @@ public class UpgradeViewModel {
     public void onShowDownloadFailTip() {
         downloadFailTipSubscription = TaskUtils.runMainThread()
                 .subscribe(s -> {
+                    if (loadingDialog != null && loadingDialog.isShowing()) {
+                        loadingDialog.dismiss();
+                    }
                     if (downloadFailTipDialog != null && downloadFailTipDialog.isShowing()) {
                         downloadFailTipDialog.dismiss();
                     }
                     downloadFailTipDialog = new SimpleDialog(context)
                             .setTitle("升级包下载失败")
                             .setTitleTextColor(Color.parseColor("#FF0000"))
-                            .setLeftBtnTextColor(Color.parseColor("#000000"))
+                            .setLeftBtnTextColor(Color.parseColor("#FFFFFF"))
                             .setLeftButton("确定", new SimpleDialog.OnButtonClickListener() {
                                 @Override
                                 public void onClick(Dialog dialog) {
@@ -341,10 +347,35 @@ public class UpgradeViewModel {
                                 }
                             });
 
+                    downloadFailTipDialog.setLeftButtonBg(context.getResources().getDrawable(R.drawable.button_down_selector));
                     downloadFailTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);
                     downloadFailTipDialog.show();
                 });
     }
 
+    public void onShowInstallFailTip() {
+        installFailTipSubscription = TaskUtils.runMainThread()
+                .subscribe(s -> {
+                    if (loadingDialog != null && loadingDialog.isShowing()) {
+                        loadingDialog.dismiss();
+                    }
+//                    if (installFailTipDialog != null && installFailTipDialog.isShowing()) {
+//                        installFailTipDialog.dismiss();
+//                    }
+//                    installFailTipDialog = new SimpleDialog(context)
+//                            .setTitle("升级超时")
+//                            .setTitleTextColor(Color.parseColor("#FF0000"))
+//                            .setLeftBtnTextColor(Color.parseColor("#000000"))
+//                            .setLeftButton("确定", new SimpleDialog.OnButtonClickListener() {
+//                                @Override
+//                                public void onClick(Dialog dialog) {
+//                                    installFailTipDialog.dismiss();
+//                                }
+//                            });
+//
+//                    installFailTipDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);
+//                    installFailTipDialog.show();
+                });
+    }
 
 }
